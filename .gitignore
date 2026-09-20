@@ -1,0 +1,26 @@
+# Downloaded/offline content
+data/*
+!data/.gitkeep
+
+# Kiwix files
+*.zim
+
+# Environment/secrets
+.env
+.env.*
+
+# Logs
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Temporary files
+*.tmp
+.cache/
+
+# OS/editor files
+.DS_Store
+.vscode/
