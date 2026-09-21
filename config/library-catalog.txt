@@ -1,0 +1,4 @@
+# id|name|size|filename|url
+general|Wikipedia Top Articles|283 MB|wikipedia_en_top_mini_2026-09.zim|https://download.kiwix.org/zim/wikipedia/wikipedia_en_top_mini_2026-09.zim
+chemistry|Wikipedia Chemistry|490 MB|wikipedia_en_chemistry_maxi_2026-07.zim|https://download.kiwix.org/zim/wikipedia/wikipedia_en_chemistry_maxi_2026-07.zim
+astronomy|Wikipedia Astronomy|385 MB|wikipedia_en_astronomy_nopic_2026-08.zim|https://download.kiwix.org/zim/wikipedia/wikipedia_en_astronomy_nopic_2026-08.zim
