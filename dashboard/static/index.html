@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>NOMAD Lite ARM</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+<body>
+
+    <header>
+        <div>
+            <h1>NOMAD Lite ARM</h1>
+            <p>Offline knowledge for lightweight hardware.</p>
+        </div>
+
+        <div id="service-status" class="status">
+            Checking...
+        </div>
+    </header>
+
+    <main>
+
+        <section>
+            <h2>Services</h2>
+
+            <div class="panel service-panel">
+
+                <div>
+                    <h3>Kiwix</h3>
+                    <p>Offline knowledge server</p>
+                </div>
+
+                <div class="buttons">
+                    <button
+                        id="start-button"
+                        onclick="startNomad()"
+                    >
+                        Start
+                    </button>
+
+                    <button
+                        id="stop-button"
+                        onclick="stopNomad()"
+                    >
+                        Stop
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+
+        <section>
+            <h2>Offline Library</h2>
+
+            <div
+                id="library"
+                class="library-grid"
+            >
+                Loading library...
+            </div>
+        </section>
+
+
+        <section>
+            <h2>System</h2>
+
+            <div class="panel">
+                <pre id="system-info">Loading...</pre>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        NOMAD Lite ARM
+    </footer>
+
+    <script src="app.js"></script>
+
+</body>
+</html>

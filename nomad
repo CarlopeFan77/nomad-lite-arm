@@ -5,6 +5,13 @@ set -e
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS="$PROJECT_DIR/scripts"
 
+PYTHON="$PROJECT_DIR/.venv/bin/python"
+
+if [ ! -x "$PYTHON" ]; then
+    PYTHON="$(command -v python3)"
+fi
+
+
 show_help() {
     echo
     echo "NOMAD Lite ARM"
@@ -19,6 +26,7 @@ show_help() {
     echo "  restart               Restart NOMAD services"
     echo "  status                Show service status"
     echo "  system                Show system information"
+    echo "  dashboard             Start web dashboard"
     echo
     echo "  library list          Show available content"
     echo "  library installed     Show installed content"
@@ -29,6 +37,7 @@ show_help() {
     echo "  help                  Show this help"
     echo
 }
+
 
 case "${1:-help}" in
 
@@ -51,6 +60,10 @@ case "${1:-help}" in
 
     system)
         "$SCRIPTS/system-info.sh"
+        ;;
+
+    dashboard)
+        "$PYTHON" "$PROJECT_DIR/dashboard/server.py"
         ;;
 
     library)

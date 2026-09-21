@@ -1,0 +1,164 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    background: #111;
+    color: #eee;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 24px;
+
+    border-bottom: 1px solid #333;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header p {
+    margin: 6px 0 0;
+    color: #999;
+}
+
+main {
+    max-width: 1000px;
+    margin: auto;
+    padding: 24px;
+}
+
+section {
+    margin-bottom: 36px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 14px;
+}
+
+.panel {
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    padding: 18px;
+}
+
+.service-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.service-panel h3 {
+    margin: 0 0 4px;
+}
+
+.service-panel p {
+    margin: 0;
+    color: #999;
+}
+
+button {
+    padding: 9px 16px;
+
+    background: #292929;
+    color: white;
+
+    border: 1px solid #444;
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+button:hover {
+    background: #383838;
+}
+
+.buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.status {
+    padding: 7px 12px;
+
+    border: 1px solid #444;
+    border-radius: 20px;
+
+    font-size: 14px;
+}
+
+.running {
+    border-color: #55a96b;
+}
+
+.stopped {
+    border-color: #aa5555;
+}
+
+.library-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+
+    gap: 12px;
+}
+
+.library-card {
+    background: #1b1b1b;
+
+    border: 1px solid #333;
+    border-radius: 10px;
+
+    padding: 16px;
+}
+
+.library-card h3 {
+    margin: 0 0 8px;
+}
+
+.library-card p {
+    margin: 4px 0;
+    color: #999;
+}
+
+.installed {
+    color: #6fc682;
+}
+
+.available {
+    color: #aaa;
+}
+
+pre {
+    white-space: pre-wrap;
+    margin: 0;
+
+    font-family:
+        "Courier New",
+        monospace;
+
+    font-size: 13px;
+}
+
+footer {
+    text-align: center;
+    padding: 24px;
+
+    color: #666;
+}
