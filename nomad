@@ -26,6 +26,7 @@ show_help() {
     echo "  restart               Restart NOMAD services"
     echo "  status                Show service status"
     echo "  system                Show system information"
+    echo
     echo "  dashboard             Start web dashboard"
     echo
     echo "  library list          Show available content"

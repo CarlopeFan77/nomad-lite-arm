@@ -112,9 +112,13 @@ install_collection() {
     echo "Approximate size: $size"
     echo
 
+    temp_file="$ZIM_DIR/$filename.part"
+
     curl -L -C - \
         "$url" \
-        -o "$ZIM_DIR/$filename"
+        -o "$temp_file"
+
+    mv "$temp_file" "$ZIM_DIR/$filename"
 
     echo
     echo "$name installed successfully."
@@ -135,8 +139,12 @@ remove_collection() {
         return
     fi
 
-    echo "Remove $name?"
-    read -r -p "[y/N]: " answer
+    if [ "$2" = "--yes" ]; then
+        answer="y"
+    else
+        echo "Remove $name?"
+        read -r -p "[y/N]: " answer
+    fi
 
     case "$answer" in
         y|Y|yes|YES)
@@ -189,7 +197,7 @@ case "$1" in
             exit 1
         fi
 
-        remove_collection "$2"
+        remove_collection "$2" "$3"
         ;;
 
     starter)

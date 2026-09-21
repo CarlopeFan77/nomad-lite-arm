@@ -6,6 +6,7 @@ from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
 
+DOWNLOADS = {}
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 STATIC_DIR = PROJECT_DIR / "dashboard" / "static"
 CATALOG_FILE = PROJECT_DIR / "config" / "library-catalog.txt"
@@ -62,17 +63,27 @@ def read_library():
 
         collection_id, name, size, filename, url = parts
 
+        zim_file = ZIM_DIR / filename
+        part_file = ZIM_DIR / f"{filename}.part"
+
         collections.append(
             {
                 "id": collection_id,
                 "name": name,
                 "size": size,
                 "filename": filename,
-                "installed": (ZIM_DIR / filename).exists(),
+                "installed": zim_file.exists(),
+                "downloading": part_file.exists(),
             }
         )
 
     return collections
+
+def collection_exists(collection_id):
+    return any(
+        item["id"] == collection_id
+        for item in read_library()
+    )
 
 
 class NomadHandler(SimpleHTTPRequestHandler):
@@ -128,6 +139,74 @@ class NomadHandler(SimpleHTTPRequestHandler):
 
         if self.path == "/api/stop":
             self.send_json(run_nomad("stop"))
+            return
+
+        if self.path.startswith("/api/library/install/"):
+            collection_id = self.path.rsplit("/", 1)[-1]
+
+            if not collection_exists(collection_id):
+                self.send_json(
+                    {
+                        "success": False,
+                        "output": "Unknown collection.",
+                    },
+                    status=404,
+                )
+                return
+
+            process = DOWNLOADS.get(collection_id)
+
+            if process and process.poll() is None:
+                self.send_json(
+                    {
+                        "success": True,
+                        "output": "Download already running.",
+                    }
+                )
+                return
+
+            DOWNLOADS[collection_id] = subprocess.Popen(
+                [
+                    str(NOMAD_COMMAND),
+                    "library",
+                    "install",
+                    collection_id,
+                ],
+                cwd=PROJECT_DIR,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+
+            self.send_json(
+                {
+                    "success": True,
+                    "output": "Download started.",
+                }
+            )
+            return
+
+
+        if self.path.startswith("/api/library/remove/"):
+            collection_id = self.path.rsplit("/", 1)[-1]
+
+            if not collection_exists(collection_id):
+                self.send_json(
+                    {
+                        "success": False,
+                        "output": "Unknown collection.",
+                    },
+                    status=404,
+                )
+                return
+
+            result = run_nomad(
+                "library",
+                "remove",
+                collection_id,
+                "--yes",
+            )
+
+            self.send_json(result)
             return
 
         self.send_json(

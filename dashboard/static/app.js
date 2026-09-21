@@ -6,13 +6,32 @@ async function loadStatus() {
         "service-status"
     );
 
+    const openButton = document.getElementById(
+        "open-library-button"
+    );
+
     if (data.running) {
+
         status.textContent = "Kiwix Running";
         status.className = "status running";
+
+        openButton.disabled = false;
+
     } else {
+
         status.textContent = "Kiwix Stopped";
         status.className = "status stopped";
+
+        openButton.disabled = true;
     }
+}
+
+
+function openLibrary() {
+    window.open(
+        "http://localhost:8080",
+        "_blank"
+    );
 }
 
 
@@ -41,26 +60,90 @@ async function loadLibrary() {
         const card = document.createElement("div");
         card.className = "library-card";
 
-        const statusClass =
-            item.installed
-                ? "installed"
-                : "available";
+        let statusText;
+        let statusClass;
+        let actionButton;
 
-        const statusText =
-            item.installed
-                ? "Installed"
-                : "Available";
+        if (item.downloading) {
+
+            statusText = "Downloading...";
+            statusClass = "available";
+
+            actionButton = `
+                <button disabled>
+                    Downloading...
+                </button>
+            `;
+
+        } else if (item.installed) {
+
+            statusText = "Installed";
+            statusClass = "installed";
+
+            actionButton = `
+                <button
+                    onclick="removeCollection('${item.id}')"
+                >
+                    Remove
+                </button>
+            `;
+
+        } else {
+
+            statusText = "Available";
+            statusClass = "available";
+
+            actionButton = `
+                <button
+                    onclick="installCollection('${item.id}')"
+                >
+                    Install
+                </button>
+            `;
+        }
 
         card.innerHTML = `
             <h3>${item.name}</h3>
+
             <p>${item.size}</p>
+
             <p class="${statusClass}">
                 ${statusText}
             </p>
+
+            ${actionButton}
         `;
 
         library.appendChild(card);
     }
+}
+
+async function installCollection(id) {
+    await fetch(
+        `/api/library/install/${id}`,
+        { method: "POST" }
+    );
+
+    await loadLibrary();
+}
+
+
+async function removeCollection(id) {
+
+    const confirmed = confirm(
+        "Remove this offline collection?"
+    );
+
+    if (!confirmed) {
+        return;
+    }
+
+    await fetch(
+        `/api/library/remove/${id}`,
+        { method: "POST" }
+    );
+
+    await loadLibrary();
 }
 
 
@@ -94,3 +177,8 @@ async function initialize() {
 
 
 initialize();
+
+setInterval(() => {
+    loadStatus();
+    loadLibrary();
+}, 5000);
