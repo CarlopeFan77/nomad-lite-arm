@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1"
@@ -20,58 +22,126 @@
     <header>
         <div>
             <h1>NOMAD Lite ARM</h1>
-            <p>Offline knowledge for lightweight hardware.</p>
+
+            <p>
+                Offline knowledge for lightweight hardware.
+            </p>
         </div>
 
-        <div id="service-status" class="status">
-            Checking...
+        <div class="status running">
+            Local • Offline
         </div>
     </header>
+
 
     <main>
 
         <section>
             <h2>Services</h2>
 
-            <div class="panel service-panel">
+            <div class="service-grid">
 
-                <div>
-                    <h3>Kiwix</h3>
-                    <p>Offline knowledge server</p>
+                <div class="panel service-card">
+
+                    <div>
+                        <h3>Kiwix</h3>
+
+                        <p>
+                            Offline knowledge library
+                        </p>
+
+                        <div
+                            id="kiwix-status"
+                            class="service-status"
+                        >
+                            Checking...
+                        </div>
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            onclick="startKiwix()"
+                        >
+                            Start
+                        </button>
+
+                        <button
+                            onclick="stopKiwix()"
+                        >
+                            Stop
+                        </button>
+
+                        <button
+                            id="open-library-button"
+                            onclick="openLibrary()"
+                            disabled
+                        >
+                            Open Library
+                        </button>
+
+                    </div>
+
                 </div>
 
-                <div class="buttons">
-                    <button
-                        id="start-button"
-                        onclick="startNomad()"
-                    >
-                        Start
-                    </button>
 
-                    <button
-                        id="stop-button"
-                        onclick="stopNomad()"
-                    >
-                        Stop
-                    </button>
+                <div class="panel service-card">
 
-                    <button
-                        id="open-library-button"
-                        onclick="openLibrary()"
-                        disabled
-                    >
-                        Open Library
-                    </button>
+                    <div>
+                        <h3>Kolibri</h3>
+
+                        <p>
+                            Offline education platform
+                        </p>
+
+                        <div
+                            id="education-status"
+                            class="service-status"
+                        >
+                            Checking...
+                        </div>
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            onclick="startEducation()"
+                        >
+                            Start
+                        </button>
+
+                        <button
+                            onclick="stopEducation()"
+                        >
+                            Stop
+                        </button>
+
+                        <button
+                            id="open-education-button"
+                            onclick="openEducation()"
+                            disabled
+                        >
+                            Open Education
+                        </button>
+
+                    </div>
+
                 </div>
+
             </div>
         </section>
 
+
         <section>
+
             <div class="library-heading">
+
                 <div>
                     <h2>Offline Library</h2>
+
                     <p class="section-description">
-                        Browse and install offline knowledge collections.
+                        Browse and install offline
+                        knowledge collections.
                     </p>
                 </div>
 
@@ -81,28 +151,38 @@
                     placeholder="Search library..."
                     oninput="renderLibrary()"
                 >
+
             </div>
 
             <div id="library">
                 Loading library...
             </div>
+
         </section>
 
+
         <section>
+
             <h2>System</h2>
 
             <div class="panel">
-                <pre id="system-info">Loading...</pre>
+                <pre id="system-info">
+Loading...
+                </pre>
             </div>
+
         </section>
 
     </main>
+
 
     <footer>
         NOMAD Lite ARM
     </footer>
 
+
     <script src="app.js"></script>
 
 </body>
+
 </html>

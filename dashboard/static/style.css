@@ -231,3 +231,42 @@ footer {
         width: 100%;
     }
 }
+
+
+.service-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(280px, 1fr)
+        );
+
+    gap: 12px;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    gap: 18px;
+}
+
+.service-card h3 {
+    margin: 0 0 5px;
+}
+
+.service-card p {
+    margin: 0 0 10px;
+    color: #999;
+}
+
+.service-status {
+    font-size: 14px;
+}
+
+button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}

@@ -6,7 +6,6 @@ from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
 
-DOWNLOADS = {}
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 STATIC_DIR = PROJECT_DIR / "dashboard" / "static"
 CATALOG_FILE = PROJECT_DIR / "config" / "library-catalog.txt"
@@ -16,6 +15,8 @@ NOMAD_COMMAND = PROJECT_DIR / "nomad"
 HOST = "127.0.0.1"
 PORT = 8081
 
+DOWNLOADS = {}
+
 
 def run_nomad(*args):
     try:
@@ -24,7 +25,7 @@ def run_nomad(*args):
             cwd=PROJECT_DIR,
             capture_output=True,
             text=True,
-            timeout=15,
+            timeout=30,
         )
 
         output = result.stdout.strip()
@@ -110,26 +111,54 @@ class NomadHandler(SimpleHTTPRequestHandler):
         body = json.dumps(data).encode("utf-8")
 
         self.send_response(status)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(body)))
+        self.send_header(
+            "Content-Type",
+            "application/json",
+        )
+        self.send_header(
+            "Content-Length",
+            str(len(body)),
+        )
         self.end_headers()
 
         self.wfile.write(body)
 
     def do_GET(self):
 
-        if self.path == "/api/status":
-            result = run_nomad("status")
+        if self.path == "/api/kiwix/status":
+            result = run_nomad(
+                "kiwix",
+                "status",
+            )
 
             result["running"] = (
-                "Kiwix is running" in result["output"]
+                "Kiwix is running"
+                in result["output"]
+            )
+
+            self.send_json(result)
+            return
+
+        if self.path == "/api/education/status":
+            result = run_nomad(
+                "education",
+                "status",
+            )
+
+            output = result["output"].lower()
+
+            result["running"] = (
+                "kolibri is running" in output
+                and "not running" not in output
             )
 
             self.send_json(result)
             return
 
         if self.path == "/api/system":
-            self.send_json(run_nomad("system"))
+            self.send_json(
+                run_nomad("system")
+            )
             return
 
         if self.path == "/api/library":
@@ -144,39 +173,83 @@ class NomadHandler(SimpleHTTPRequestHandler):
 
     def do_POST(self):
 
-        if self.path == "/api/start":
-            self.send_json(run_nomad("start"))
+        if self.path == "/api/kiwix/start":
+            self.send_json(
+                run_nomad(
+                    "kiwix",
+                    "start",
+                )
+            )
             return
 
-        if self.path == "/api/stop":
-            self.send_json(run_nomad("stop"))
+        if self.path == "/api/kiwix/stop":
+            self.send_json(
+                run_nomad(
+                    "kiwix",
+                    "stop",
+                )
+            )
             return
 
-        if self.path.startswith("/api/library/install/"):
-            collection_id = self.path.rsplit("/", 1)[-1]
+        if self.path == "/api/education/start":
+            self.send_json(
+                run_nomad(
+                    "education",
+                    "start",
+                )
+            )
+            return
 
-            if not collection_exists(collection_id):
+        if self.path == "/api/education/stop":
+            self.send_json(
+                run_nomad(
+                    "education",
+                    "stop",
+                )
+            )
+            return
+
+        if self.path.startswith(
+            "/api/library/install/"
+        ):
+            collection_id = self.path.rsplit(
+                "/",
+                1,
+            )[-1]
+
+            if not collection_exists(
+                collection_id
+            ):
                 self.send_json(
                     {
                         "success": False,
-                        "output": "Unknown collection.",
+                        "output":
+                            "Unknown collection.",
                     },
                     status=404,
                 )
                 return
 
-            process = DOWNLOADS.get(collection_id)
+            process = DOWNLOADS.get(
+                collection_id
+            )
 
-            if process and process.poll() is None:
+            if (
+                process
+                and process.poll() is None
+            ):
                 self.send_json(
                     {
                         "success": True,
-                        "output": "Download already running.",
+                        "output":
+                            "Download already running.",
                     }
                 )
                 return
 
-            DOWNLOADS[collection_id] = subprocess.Popen(
+            DOWNLOADS[
+                collection_id
+            ] = subprocess.Popen(
                 [
                     str(NOMAD_COMMAND),
                     "library",
@@ -191,20 +264,28 @@ class NomadHandler(SimpleHTTPRequestHandler):
             self.send_json(
                 {
                     "success": True,
-                    "output": "Download started.",
+                    "output":
+                        "Download started.",
                 }
             )
             return
 
+        if self.path.startswith(
+            "/api/library/remove/"
+        ):
+            collection_id = self.path.rsplit(
+                "/",
+                1,
+            )[-1]
 
-        if self.path.startswith("/api/library/remove/"):
-            collection_id = self.path.rsplit("/", 1)[-1]
-
-            if not collection_exists(collection_id):
+            if not collection_exists(
+                collection_id
+            ):
                 self.send_json(
                     {
                         "success": False,
-                        "output": "Unknown collection.",
+                        "output":
+                            "Unknown collection.",
                     },
                     status=404,
                 )
@@ -221,7 +302,10 @@ class NomadHandler(SimpleHTTPRequestHandler):
             return
 
         self.send_json(
-            {"success": False, "output": "Unknown action."},
+            {
+                "success": False,
+                "output": "Unknown action.",
+            },
             status=404,
         )
 
@@ -235,14 +319,19 @@ def main():
     print()
     print("NOMAD Lite ARM Dashboard")
     print("========================")
-    print(f"Running at http://localhost:{PORT}")
+    print(
+        f"Running at "
+        f"http://localhost:{PORT}"
+    )
     print("Press Ctrl+C to stop.")
     print()
 
     try:
         server.serve_forever()
+
     except KeyboardInterrupt:
         print("\nDashboard stopped.")
+
     finally:
         server.server_close()
 

@@ -21,21 +21,29 @@ show_help() {
     echo "  ./nomad COMMAND"
     echo
     echo "Commands:"
-    echo "  start                 Start NOMAD services"
-    echo "  stop                  Stop NOMAD services"
-    echo "  restart               Restart NOMAD services"
-    echo "  status                Show service status"
-    echo "  system                Show system information"
+    echo "  start                     Start all NOMAD services"
+    echo "  stop                      Stop all NOMAD services"
+    echo "  restart                   Restart all NOMAD services"
+    echo "  status                    Show all service status"
     echo
-    echo "  dashboard             Start web dashboard"
+    echo "  kiwix start               Start Kiwix"
+    echo "  kiwix stop                Stop Kiwix"
+    echo "  kiwix status              Show Kiwix status"
     echo
-    echo "  library list          Show available content"
-    echo "  library installed     Show installed content"
-    echo "  library info NAME     Show collection information"
-    echo "  library install NAME  Install a collection"
-    echo "  library remove NAME   Remove a collection"
+    echo "  education start           Start Kolibri"
+    echo "  education stop            Stop Kolibri"
+    echo "  education status          Show Kolibri status"
     echo
-    echo "  help                  Show this help"
+    echo "  system                    Show system information"
+    echo "  dashboard                 Start web dashboard"
+    echo
+    echo "  library list              Show available content"
+    echo "  library installed         Show installed content"
+    echo "  library info NAME         Show collection information"
+    echo "  library install NAME      Install a collection"
+    echo "  library remove NAME       Remove a collection"
+    echo
+    echo "  help                      Show this help"
     echo
 }
 
@@ -44,19 +52,43 @@ case "${1:-help}" in
 
     start)
         "$SCRIPTS/kiwix.sh" start
+        "$SCRIPTS/kolibri.sh" start
         ;;
 
     stop)
         "$SCRIPTS/kiwix.sh" stop
+        "$SCRIPTS/kolibri.sh" stop
         ;;
 
     restart)
         "$SCRIPTS/kiwix.sh" stop
+        "$SCRIPTS/kolibri.sh" stop
+
         "$SCRIPTS/kiwix.sh" start
+        "$SCRIPTS/kolibri.sh" start
         ;;
 
     status)
+        echo
+        echo "Kiwix"
+        echo "--------------------------------"
         "$SCRIPTS/kiwix.sh" status
+
+        echo
+        echo "Kolibri"
+        echo "--------------------------------"
+        "$SCRIPTS/kolibri.sh" status
+        echo
+        ;;
+
+    kiwix)
+        shift
+        "$SCRIPTS/kiwix.sh" "$@"
+        ;;
+
+    education)
+        shift
+        "$SCRIPTS/kolibri.sh" "$@"
         ;;
 
     system)

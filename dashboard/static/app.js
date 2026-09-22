@@ -1,26 +1,66 @@
 let libraryCollections = [];
 
 
-async function loadStatus() {
-    const response = await fetch("/api/status");
+async function loadKiwixStatus() {
+    const response = await fetch(
+        "/api/kiwix/status"
+    );
+
     const data = await response.json();
 
-    const status = document.getElementById(
-        "service-status"
-    );
+    const status =
+        document.getElementById(
+            "kiwix-status"
+        );
 
-    const openButton = document.getElementById(
-        "open-library-button"
-    );
+    const openButton =
+        document.getElementById(
+            "open-library-button"
+        );
 
     if (data.running) {
-        status.textContent = "Kiwix Running";
-        status.className = "status running";
+        status.textContent = "Running";
+        status.className =
+            "service-status installed";
 
         openButton.disabled = false;
     } else {
-        status.textContent = "Kiwix Stopped";
-        status.className = "status stopped";
+        status.textContent = "Stopped";
+        status.className =
+            "service-status available";
+
+        openButton.disabled = true;
+    }
+}
+
+
+async function loadEducationStatus() {
+    const response = await fetch(
+        "/api/education/status"
+    );
+
+    const data = await response.json();
+
+    const status =
+        document.getElementById(
+            "education-status"
+        );
+
+    const openButton =
+        document.getElementById(
+            "open-education-button"
+        );
+
+    if (data.running) {
+        status.textContent = "Running";
+        status.className =
+            "service-status installed";
+
+        openButton.disabled = false;
+    } else {
+        status.textContent = "Stopped";
+        status.className =
+            "service-status available";
 
         openButton.disabled = true;
     }
@@ -28,7 +68,10 @@ async function loadStatus() {
 
 
 async function loadSystem() {
-    const response = await fetch("/api/system");
+    const response = await fetch(
+        "/api/system"
+    );
+
     const data = await response.json();
 
     document.getElementById(
@@ -38,38 +81,52 @@ async function loadSystem() {
 
 
 async function loadLibrary() {
-    const response = await fetch("/api/library");
+    const response = await fetch(
+        "/api/library"
+    );
+
     const data = await response.json();
 
-    libraryCollections = data.collections;
+    libraryCollections =
+        data.collections;
 
     renderLibrary();
 }
 
 
 function renderLibrary() {
-    const library = document.getElementById("library");
+    const library =
+        document.getElementById(
+            "library"
+        );
 
-    const searchBox = document.getElementById(
-        "library-search"
-    );
+    const searchBox =
+        document.getElementById(
+            "library-search"
+        );
 
     const query = searchBox
-        ? searchBox.value.trim().toLowerCase()
+        ? searchBox.value
+            .trim()
+            .toLowerCase()
         : "";
 
-    const filtered = libraryCollections.filter((item) => {
-        const text = [
-            item.name,
-            item.category,
-            item.description,
-            item.id,
-        ]
-            .join(" ")
-            .toLowerCase();
+    const filtered =
+        libraryCollections.filter(
+            (item) => {
 
-        return text.includes(query);
-    });
+                const text = [
+                    item.name,
+                    item.category,
+                    item.description,
+                    item.id,
+                ]
+                    .join(" ")
+                    .toLowerCase();
+
+                return text.includes(query);
+            }
+        );
 
     library.innerHTML = "";
 
@@ -86,32 +143,51 @@ function renderLibrary() {
     const categories = {};
 
     for (const item of filtered) {
+
         if (!categories[item.category]) {
             categories[item.category] = [];
         }
 
-        categories[item.category].push(item);
+        categories[item.category].push(
+            item
+        );
     }
 
-    for (const [category, items] of Object.entries(categories)) {
+    for (
+        const [category, items]
+        of Object.entries(categories)
+    ) {
 
-        const section = document.createElement("div");
-        section.className = "library-category";
+        const section =
+            document.createElement("div");
 
-        const title = document.createElement("h3");
-        title.className = "category-title";
+        section.className =
+            "library-category";
+
+        const title =
+            document.createElement("h3");
+
+        title.className =
+            "category-title";
+
         title.textContent = category;
 
-        const grid = document.createElement("div");
-        grid.className = "library-grid";
+        const grid =
+            document.createElement("div");
+
+        grid.className =
+            "library-grid";
 
         section.appendChild(title);
         section.appendChild(grid);
 
         for (const item of items) {
-            const card = document.createElement("div");
 
-            card.className = "library-card";
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "library-card";
 
             let statusText;
             let statusClass;
@@ -119,8 +195,11 @@ function renderLibrary() {
 
             if (item.downloading) {
 
-                statusText = "Downloading...";
-                statusClass = "available";
+                statusText =
+                    "Downloading...";
+
+                statusClass =
+                    "available";
 
                 actionButton = `
                     <button disabled>
@@ -130,12 +209,19 @@ function renderLibrary() {
 
             } else if (item.installed) {
 
-                statusText = "Installed";
-                statusClass = "installed";
+                statusText =
+                    "Installed";
+
+                statusClass =
+                    "installed";
 
                 actionButton = `
                     <button
-                        onclick="removeCollection('${item.id}')"
+                        onclick="
+                            removeCollection(
+                                '${item.id}'
+                            )
+                        "
                     >
                         Remove
                     </button>
@@ -143,12 +229,19 @@ function renderLibrary() {
 
             } else {
 
-                statusText = "Available";
-                statusClass = "available";
+                statusText =
+                    "Available";
+
+                statusClass =
+                    "available";
 
                 actionButton = `
                     <button
-                        onclick="installCollection('${item.id}')"
+                        onclick="
+                            installCollection(
+                                '${item.id}'
+                            )
+                        "
                     >
                         Install
                     </button>
@@ -163,11 +256,17 @@ function renderLibrary() {
                 </p>
 
                 <div class="library-meta">
-                    <span>${item.size}</span>
 
-                    <span class="${statusClass}">
+                    <span>
+                        ${item.size}
+                    </span>
+
+                    <span
+                        class="${statusClass}"
+                    >
                         ${statusText}
                     </span>
+
                 </div>
 
                 ${actionButton}
@@ -184,7 +283,9 @@ function renderLibrary() {
 async function installCollection(id) {
     await fetch(
         `/api/library/install/${id}`,
-        { method: "POST" }
+        {
+            method: "POST"
+        }
     );
 
     await loadLibrary();
@@ -202,30 +303,60 @@ async function removeCollection(id) {
 
     await fetch(
         `/api/library/remove/${id}`,
-        { method: "POST" }
+        {
+            method: "POST"
+        }
     );
 
     await loadLibrary();
 }
 
 
-async function startNomad() {
+async function startKiwix() {
     await fetch(
-        "/api/start",
-        { method: "POST" }
+        "/api/kiwix/start",
+        {
+            method: "POST"
+        }
     );
 
-    await loadStatus();
+    await loadKiwixStatus();
 }
 
 
-async function stopNomad() {
+async function stopKiwix() {
     await fetch(
-        "/api/stop",
-        { method: "POST" }
+        "/api/kiwix/stop",
+        {
+            method: "POST"
+        }
     );
 
-    await loadStatus();
+    await loadKiwixStatus();
+}
+
+
+async function startEducation() {
+    await fetch(
+        "/api/education/start",
+        {
+            method: "POST"
+        }
+    );
+
+    await loadEducationStatus();
+}
+
+
+async function stopEducation() {
+    await fetch(
+        "/api/education/stop",
+        {
+            method: "POST"
+        }
+    );
+
+    await loadEducationStatus();
 }
 
 
@@ -237,9 +368,18 @@ function openLibrary() {
 }
 
 
+function openEducation() {
+    window.open(
+        "http://localhost:8082",
+        "_blank"
+    );
+}
+
+
 async function initialize() {
     await Promise.all([
-        loadStatus(),
+        loadKiwixStatus(),
+        loadEducationStatus(),
         loadLibrary(),
         loadSystem(),
     ]);
@@ -250,6 +390,7 @@ initialize();
 
 
 setInterval(() => {
-    loadStatus();
+    loadKiwixStatus();
+    loadEducationStatus();
     loadLibrary();
 }, 5000);
