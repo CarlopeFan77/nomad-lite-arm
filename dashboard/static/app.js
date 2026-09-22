@@ -1,3 +1,6 @@
+let libraryCollections = [];
+
+
 async function loadStatus() {
     const response = await fetch("/api/status");
     const data = await response.json();
@@ -11,27 +14,16 @@ async function loadStatus() {
     );
 
     if (data.running) {
-
         status.textContent = "Kiwix Running";
         status.className = "status running";
 
         openButton.disabled = false;
-
     } else {
-
         status.textContent = "Kiwix Stopped";
         status.className = "status stopped";
 
         openButton.disabled = true;
     }
-}
-
-
-function openLibrary() {
-    window.open(
-        "http://localhost:8080",
-        "_blank"
-    );
 }
 
 
@@ -49,74 +41,145 @@ async function loadLibrary() {
     const response = await fetch("/api/library");
     const data = await response.json();
 
-    const library = document.getElementById(
-        "library"
+    libraryCollections = data.collections;
+
+    renderLibrary();
+}
+
+
+function renderLibrary() {
+    const library = document.getElementById("library");
+
+    const searchBox = document.getElementById(
+        "library-search"
     );
+
+    const query = searchBox
+        ? searchBox.value.trim().toLowerCase()
+        : "";
+
+    const filtered = libraryCollections.filter((item) => {
+        const text = [
+            item.name,
+            item.category,
+            item.description,
+            item.id,
+        ]
+            .join(" ")
+            .toLowerCase();
+
+        return text.includes(query);
+    });
 
     library.innerHTML = "";
 
-    for (const item of data.collections) {
-
-        const card = document.createElement("div");
-        card.className = "library-card";
-
-        let statusText;
-        let statusClass;
-        let actionButton;
-
-        if (item.downloading) {
-
-            statusText = "Downloading...";
-            statusClass = "available";
-
-            actionButton = `
-                <button disabled>
-                    Downloading...
-                </button>
-            `;
-
-        } else if (item.installed) {
-
-            statusText = "Installed";
-            statusClass = "installed";
-
-            actionButton = `
-                <button
-                    onclick="removeCollection('${item.id}')"
-                >
-                    Remove
-                </button>
-            `;
-
-        } else {
-
-            statusText = "Available";
-            statusClass = "available";
-
-            actionButton = `
-                <button
-                    onclick="installCollection('${item.id}')"
-                >
-                    Install
-                </button>
-            `;
-        }
-
-        card.innerHTML = `
-            <h3>${item.name}</h3>
-
-            <p>${item.size}</p>
-
-            <p class="${statusClass}">
-                ${statusText}
-            </p>
-
-            ${actionButton}
+    if (filtered.length === 0) {
+        library.innerHTML = `
+            <div class="panel">
+                No matching collections found.
+            </div>
         `;
 
-        library.appendChild(card);
+        return;
+    }
+
+    const categories = {};
+
+    for (const item of filtered) {
+        if (!categories[item.category]) {
+            categories[item.category] = [];
+        }
+
+        categories[item.category].push(item);
+    }
+
+    for (const [category, items] of Object.entries(categories)) {
+
+        const section = document.createElement("div");
+        section.className = "library-category";
+
+        const title = document.createElement("h3");
+        title.className = "category-title";
+        title.textContent = category;
+
+        const grid = document.createElement("div");
+        grid.className = "library-grid";
+
+        section.appendChild(title);
+        section.appendChild(grid);
+
+        for (const item of items) {
+            const card = document.createElement("div");
+
+            card.className = "library-card";
+
+            let statusText;
+            let statusClass;
+            let actionButton;
+
+            if (item.downloading) {
+
+                statusText = "Downloading...";
+                statusClass = "available";
+
+                actionButton = `
+                    <button disabled>
+                        Downloading...
+                    </button>
+                `;
+
+            } else if (item.installed) {
+
+                statusText = "Installed";
+                statusClass = "installed";
+
+                actionButton = `
+                    <button
+                        onclick="removeCollection('${item.id}')"
+                    >
+                        Remove
+                    </button>
+                `;
+
+            } else {
+
+                statusText = "Available";
+                statusClass = "available";
+
+                actionButton = `
+                    <button
+                        onclick="installCollection('${item.id}')"
+                    >
+                        Install
+                    </button>
+                `;
+            }
+
+            card.innerHTML = `
+                <h3>${item.name}</h3>
+
+                <p class="library-description">
+                    ${item.description}
+                </p>
+
+                <div class="library-meta">
+                    <span>${item.size}</span>
+
+                    <span class="${statusClass}">
+                        ${statusText}
+                    </span>
+                </div>
+
+                ${actionButton}
+            `;
+
+            grid.appendChild(card);
+        }
+
+        library.appendChild(section);
     }
 }
+
 
 async function installCollection(id) {
     await fetch(
@@ -129,7 +192,6 @@ async function installCollection(id) {
 
 
 async function removeCollection(id) {
-
     const confirmed = confirm(
         "Remove this offline collection?"
     );
@@ -167,16 +229,25 @@ async function stopNomad() {
 }
 
 
+function openLibrary() {
+    window.open(
+        "http://localhost:8080",
+        "_blank"
+    );
+}
+
+
 async function initialize() {
     await Promise.all([
         loadStatus(),
         loadLibrary(),
-        loadSystem()
+        loadSystem(),
     ]);
 }
 
 
 initialize();
+
 
 setInterval(() => {
     loadStatus();

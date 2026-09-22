@@ -8,35 +8,45 @@ ZIM_DIR="$PROJECT_DIR/data/zim"
 
 mkdir -p "$ZIM_DIR"
 
+
 get_entry() {
-    grep "^$1|" "$CATALOG" || true
+    awk -F '|' -v id="$1" '
+        $1 == id {
+            print
+            exit
+        }
+    ' "$CATALOG"
 }
+
 
 show_list() {
     echo
     echo "NOMAD Lite ARM Library"
-    echo "=============================================================="
-    printf "%-12s %-30s %-10s %-12s\n" \
-        "ID" "COLLECTION" "SIZE" "STATUS"
-    echo "--------------------------------------------------------------"
+    echo "================================================================================"
+    printf "%-20s %-16s %-28s %-9s %-12s\n" \
+        "ID" "CATEGORY" "COLLECTION" "SIZE" "STATUS"
+    echo "--------------------------------------------------------------------------------"
 
-    while IFS='|' read -r id name size filename url; do
+    while IFS='|' read -r id category name description size filename url; do
 
         [[ "$id" =~ ^#.*$ || -z "$id" ]] && continue
 
         if [ -f "$ZIM_DIR/$filename" ]; then
             status="Installed"
+        elif [ -f "$ZIM_DIR/$filename.part" ]; then
+            status="Downloading"
         else
             status="Available"
         fi
 
-        printf "%-12s %-30s %-10s %-12s\n" \
-            "$id" "$name" "$size" "$status"
+        printf "%-20s %-16s %-28s %-9s %-12s\n" \
+            "$id" "$category" "$name" "$size" "$status"
 
     done < "$CATALOG"
 
     echo
 }
+
 
 show_installed() {
     echo
@@ -45,7 +55,7 @@ show_installed() {
 
     found=false
 
-    while IFS='|' read -r id name size filename url; do
+    while IFS='|' read -r id category name description size filename url; do
 
         [[ "$id" =~ ^#.*$ || -z "$id" ]] && continue
 
@@ -63,6 +73,7 @@ show_installed() {
     echo
 }
 
+
 show_info() {
     entry=$(get_entry "$1")
 
@@ -71,23 +82,28 @@ show_info() {
         exit 1
     fi
 
-    IFS='|' read -r id name size filename url <<< "$entry"
+    IFS='|' read -r id category name description size filename url <<< "$entry"
 
     echo
     echo "$name"
     echo "================================"
-    echo "ID:       $id"
-    echo "Size:     $size"
-    echo "File:     $filename"
+    echo "ID:          $id"
+    echo "Category:    $category"
+    echo "Size:        $size"
+    echo "Description: $description"
+    echo "File:        $filename"
 
     if [ -f "$ZIM_DIR/$filename" ]; then
-        echo "Status:   Installed"
+        echo "Status:      Installed"
+    elif [ -f "$ZIM_DIR/$filename.part" ]; then
+        echo "Status:      Downloading"
     else
-        echo "Status:   Not installed"
+        echo "Status:      Not installed"
     fi
 
     echo
 }
+
 
 install_collection() {
     entry=$(get_entry "$1")
@@ -100,19 +116,20 @@ install_collection() {
         exit 1
     fi
 
-    IFS='|' read -r id name size filename url <<< "$entry"
+    IFS='|' read -r id category name description size filename url <<< "$entry"
 
     if [ -f "$ZIM_DIR/$filename" ]; then
         echo "$name is already installed."
         return
     fi
 
+    temp_file="$ZIM_DIR/$filename.part"
+
     echo
     echo "Installing $name"
+    echo "Category: $category"
     echo "Approximate size: $size"
     echo
-
-    temp_file="$ZIM_DIR/$filename.part"
 
     curl -L -C - \
         "$url" \
@@ -124,6 +141,7 @@ install_collection() {
     echo "$name installed successfully."
 }
 
+
 remove_collection() {
     entry=$(get_entry "$1")
 
@@ -132,7 +150,7 @@ remove_collection() {
         exit 1
     fi
 
-    IFS='|' read -r id name size filename url <<< "$entry"
+    IFS='|' read -r id category name description size filename url <<< "$entry"
 
     if [ ! -f "$ZIM_DIR/$filename" ]; then
         echo "$name is not installed."
@@ -157,11 +175,13 @@ remove_collection() {
     esac
 }
 
+
 install_starter() {
     install_collection general
     install_collection chemistry
     install_collection astronomy
 }
+
 
 case "$1" in
 

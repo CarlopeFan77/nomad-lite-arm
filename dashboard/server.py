@@ -56,12 +56,20 @@ def read_library():
         if not line or line.startswith("#"):
             continue
 
-        parts = line.split("|", 4)
+        parts = line.split("|", 6)
 
-        if len(parts) != 5:
+        if len(parts) != 7:
             continue
 
-        collection_id, name, size, filename, url = parts
+        (
+            collection_id,
+            category,
+            name,
+            description,
+            size,
+            filename,
+            url,
+        ) = parts
 
         zim_file = ZIM_DIR / filename
         part_file = ZIM_DIR / f"{filename}.part"
@@ -69,7 +77,9 @@ def read_library():
         collections.append(
             {
                 "id": collection_id,
+                "category": category,
                 "name": name,
+                "description": description,
                 "size": size,
                 "filename": filename,
                 "installed": zim_file.exists(),
@@ -78,6 +88,7 @@ def read_library():
         )
 
     return collections
+
 
 def collection_exists(collection_id):
     return any(

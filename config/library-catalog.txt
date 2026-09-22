@@ -1,4 +1,35 @@
-# id|name|size|filename|url
-general|Wikipedia Top Articles|283 MB|wikipedia_en_top_mini_2026-09.zim|https://download.kiwix.org/zim/wikipedia/wikipedia_en_top_mini_2026-09.zim
-chemistry|Wikipedia Chemistry|490 MB|wikipedia_en_chemistry_maxi_2026-07.zim|https://download.kiwix.org/zim/wikipedia/wikipedia_en_chemistry_maxi_2026-07.zim
-astronomy|Wikipedia Astronomy|385 MB|wikipedia_en_astronomy_nopic_2026-08.zim|https://download.kiwix.org/zim/wikipedia/wikipedia_en_astronomy_nopic_2026-08.zim
+# id|category|name|description|size|filename|url
+
+general|General|Wikipedia Top Articles|A compact general-purpose Wikipedia collection.|283 MB|wikipedia_en_top_mini_2026-09.zim|https://download.kiwix.org/zim/wikipedia/wikipedia_en_top_mini_2026-09.zim
+simple-dictionary|General|Simple English Wiktionary|A lightweight offline English dictionary.|25 MB|wiktionary_en-simple_all_nopic_2026-07.zim|https://download.kiwix.org/zim/wiktionary/wiktionary_en-simple_all_nopic_2026-07.zim
+
+chemistry|Science|Wikipedia Chemistry|Chemistry articles from Wikipedia with images.|490 MB|wikipedia_en_chemistry_maxi_2026-07.zim|https://download.kiwix.org/zim/wikipedia/wikipedia_en_chemistry_maxi_2026-07.zim
+astronomy|Science|Wikipedia Astronomy|Complete astronomy articles without images.|385 MB|wikipedia_en_astronomy_nopic_2026-08.zim|https://download.kiwix.org/zim/wikipedia/wikipedia_en_astronomy_nopic_2026-08.zim
+physics|Science|LibreTexts Physics|Open physics textbooks and course material.|534 MB|libretexts.org_en_phys_2026-01.zim|https://download.kiwix.org/zim/libretexts/libretexts.org_en_phys_2026-01.zim
+engineering|Science|LibreTexts Engineering|Engineering courses and technical references.|678 MB|libretexts.org_en_eng_2025-01.zim|https://download.kiwix.org/zim/libretexts/libretexts.org_en_eng_2025-01.zim
+
+python|Computing|Python Documentation|Offline Python language reference and tutorials.|4 MB|devdocs_en_python_2026-02.zim|https://download.kiwix.org/zim/devdocs/devdocs_en_python_2026-02.zim
+javascript|Computing|JavaScript Documentation|Offline JavaScript reference and guides.|3 MB|devdocs_en_javascript_2026-07.zim|https://download.kiwix.org/zim/devdocs/devdocs_en_javascript_2026-07.zim
+html|Computing|HTML Documentation|Offline HTML element and attribute reference.|2 MB|devdocs_en_html_2026-07.zim|https://download.kiwix.org/zim/devdocs/devdocs_en_html_2026-07.zim
+css|Computing|CSS Documentation|Offline CSS properties and selector reference.|5 MB|devdocs_en_css_2026-07.zim|https://download.kiwix.org/zim/devdocs/devdocs_en_css_2026-07.zim
+git|Computing|Git Documentation|Offline Git version-control reference.|2 MB|devdocs_en_git_2026-07.zim|https://download.kiwix.org/zim/devdocs/devdocs_en_git_2026-07.zim
+docker|Computing|Docker Documentation|Offline Docker reference and guides.|2 MB|devdocs_en_docker_2026-07.zim|https://download.kiwix.org/zim/devdocs/devdocs_en_docker_2026-07.zim
+bash|Computing|Bash & Linux Documentation|Lightweight shell and Linux command reference.|1 MB|devdocs_en_bash_2026-01.zim|https://download.kiwix.org/zim/devdocs/devdocs_en_bash_2026-01.zim
+freecodecamp|Computing|freeCodeCamp|Programming tutorials covering JavaScript, algorithms, and data structures.|8 MB|freecodecamp_en_all_2026-02.zim|https://download.kiwix.org/zim/freecodecamp/freecodecamp_en_all_2026-02.zim
+arduino|Computing|Arduino Q&A|Arduino project and troubleshooting knowledge from Stack Exchange.|247 MB|arduino.stackexchange.com_en_all_2026-02.zim|https://download.kiwix.org/zim/stack_exchange/arduino.stackexchange.com_en_all_2026-02.zim
+raspberry-pi|Computing|Raspberry Pi Q&A|Raspberry Pi projects, setup, and troubleshooting.|285 MB|raspberrypi.stackexchange.com_en_all_2026-02.zim|https://download.kiwix.org/zim/stack_exchange/raspberrypi.stackexchange.com_en_all_2026-02.zim
+
+woodworking|Repair & Practical|Woodworking Q&A|Carpentry, joinery, tools, and woodworking knowledge.|99 MB|woodworking.stackexchange.com_en_all_2026-02.zim|https://download.kiwix.org/zim/stack_exchange/woodworking.stackexchange.com_en_all_2026-02.zim
+mechanics|Repair & Practical|Vehicle Maintenance Q&A|Car and motorcycle maintenance and repair.|321 MB|mechanics.stackexchange.com_en_all_2026-02.zim|https://download.kiwix.org/zim/stack_exchange/mechanics.stackexchange.com_en_all_2026-02.zim
+ifixit|Repair & Practical|iFixit Repair Guides|Step-by-step electronics, appliance, and device repair guides.|3.3 GB|ifixit_en_all_2025-12.zim|https://download.kiwix.org/zim/ifixit/ifixit_en_all_2025-12.zim
+knots|Repair & Practical|Knots Library|Illustrated reference for knots, lashings, and related techniques.|27 MB|zimgit-knots_en_2024-08.zim|https://download.kiwix.org/zim/other/zimgit-knots_en_2024-08.zim
+
+based-cooking|Food|Based.Cooking|Simple practical recipes for offline use.|16 MB|based.cooking_en_all_2026-02.zim|https://download.kiwix.org/zim/zimit/based.cooking_en_all_2026-02.zim
+foss-cooking|Food|FOSS Cooking|Quick cooking guides and recipes.|24 MB|foss.cooking_en_all_2026-02.zim|https://download.kiwix.org/zim/zimit/foss.cooking_en_all_2026-02.zim
+
+medical-library|Medicine|Medical Library|Field and emergency medicine books and guides.|67 MB|zimgit-medicine_en_2024-08.zim|https://download.kiwix.org/zim/other/zimgit-medicine_en_2024-08.zim
+nhs-medicines|Medicine|NHS Medicines A to Z|Medicine information including uses and side effects.|16 MB|nhs.uk_en_medicines_2025-12.zim|https://download.kiwix.org/zim/zimit/nhs.uk_en_medicines_2025-12.zim
+librepathology|Medicine|LibrePathology|Offline pathology reference material.|76 MB|librepathology_en_all_maxi_2025-09.zim|https://download.kiwix.org/zim/other/librepathology_en_all_maxi_2025-09.zim
+
+water|Preparedness|Water Treatment Library|Guides for collecting, filtering, and purifying water.|20 MB|zimgit-water_en_2024-08.zim|https://download.kiwix.org/zim/other/zimgit-water_en_2024-08.zim
+outdoors|Preparedness|Great Outdoors Q&A|Hiking, camping, navigation, and wilderness knowledge.|142 MB|outdoors.stackexchange.com_en_all_2026-02.zim|https://download.kiwix.org/zim/stack_exchange/outdoors.stackexchange.com_en_all_2026-02.zim
