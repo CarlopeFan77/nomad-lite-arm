@@ -10,6 +10,29 @@ PROJECT_DIR = Path(__file__).resolve().parent.parent
 STATIC_DIR = PROJECT_DIR / "dashboard" / "static"
 CATALOG_FILE = PROJECT_DIR / "config" / "library-catalog.txt"
 ZIM_DIR = PROJECT_DIR / "data" / "zim"
+
+EDUCATION_CATALOG = (
+    PROJECT_DIR
+    / "config"
+    / "education-catalog.txt"
+)
+
+EDUCATION_STATE = (
+    PROJECT_DIR
+    / "data"
+    / "education"
+)
+
+EDUCATION_INSTALLED = (
+    EDUCATION_STATE
+    / "installed"
+)
+
+EDUCATION_INSTALLING = (
+    EDUCATION_STATE
+    / "installing"
+)
+
 NOMAD_COMMAND = PROJECT_DIR / "nomad"
 
 HOST = "127.0.0.1"
@@ -90,6 +113,57 @@ def read_library():
 
     return collections
 
+def read_education():
+    courses = []
+
+    if not EDUCATION_CATALOG.exists():
+        return courses
+
+    for line in EDUCATION_CATALOG.read_text().splitlines():
+        line = line.strip()
+
+        if not line or line.startswith("#"):
+            continue
+
+        parts = line.split("|", 4)
+
+        if len(parts) != 5:
+            continue
+
+        (
+            course_id,
+            category,
+            name,
+            description,
+            node_id,
+        ) = parts
+
+        courses.append(
+            {
+                "id": course_id,
+                "category": category,
+                "name": name,
+                "description": description,
+                "installed": (
+                    EDUCATION_INSTALLED
+                    / course_id
+                ).exists(),
+                "downloading": (
+                    EDUCATION_INSTALLING
+                    / course_id
+                ).exists(),
+            }
+        )
+
+    return courses
+
+
+def education_exists(course_id):
+    return any(
+        item["id"] == course_id
+        for item in read_education()
+    )
+
 
 def collection_exists(collection_id):
     return any(
@@ -169,6 +243,14 @@ class NomadHandler(SimpleHTTPRequestHandler):
             )
             return
 
+        if self.path == "/api/education/library":
+            self.send_json(
+                {
+                    "courses": read_education()
+                }
+            )
+            return
+
         super().do_GET()
 
     def do_POST(self):
@@ -206,6 +288,48 @@ class NomadHandler(SimpleHTTPRequestHandler):
                     "education",
                     "stop",
                 )
+            )
+            return
+
+        if self.path.startswith(
+            "/api/education/install/"
+        ):
+            course_id = self.path.rsplit(
+                "/",
+                1,
+            )[-1]
+
+            if not education_exists(
+                course_id
+            ):
+                self.send_json(
+                    {
+                        "success": False,
+                        "output":
+                            "Unknown education course.",
+                    },
+                    status=404,
+                )
+                return
+
+            subprocess.Popen(
+                [
+                    str(NOMAD_COMMAND),
+                    "education",
+                    "install",
+                    course_id,
+                ],
+                cwd=PROJECT_DIR,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+
+            self.send_json(
+                {
+                    "success": True,
+                    "output":
+                        "Education download started.",
+                }
             )
             return
 

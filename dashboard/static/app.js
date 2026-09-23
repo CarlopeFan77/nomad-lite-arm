@@ -1,4 +1,5 @@
 let libraryCollections = [];
+let educationCourses = [];
 
 
 async function loadKiwixStatus() {
@@ -77,6 +78,200 @@ async function loadSystem() {
     document.getElementById(
         "system-info"
     ).textContent = data.output;
+}
+
+
+async function loadEducation() {
+    const response = await fetch(
+        "/api/education/library"
+    );
+
+    const data = await response.json();
+
+    educationCourses = data.courses;
+
+    renderEducation();
+}
+
+
+function renderEducation() {
+    const container =
+        document.getElementById(
+            "education-library"
+        );
+
+    const searchBox =
+        document.getElementById(
+            "education-search"
+        );
+
+    const query = searchBox
+        ? searchBox.value
+            .trim()
+            .toLowerCase()
+        : "";
+
+    const filtered =
+        educationCourses.filter(
+            (item) => {
+
+                const text = [
+                    item.name,
+                    item.category,
+                    item.description,
+                    item.id,
+                ]
+                    .join(" ")
+                    .toLowerCase();
+
+                return text.includes(query);
+            }
+        );
+
+    container.innerHTML = "";
+
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div class="panel">
+                No matching courses found.
+            </div>
+        `;
+
+        return;
+    }
+
+    const categories = {};
+
+    for (const item of filtered) {
+
+        if (!categories[item.category]) {
+            categories[item.category] = [];
+        }
+
+        categories[item.category].push(item);
+    }
+
+    for (
+        const [category, items]
+        of Object.entries(categories)
+    ) {
+
+        const section =
+            document.createElement("div");
+
+        section.className =
+            "library-category";
+
+        const title =
+            document.createElement("h3");
+
+        title.className =
+            "category-title";
+
+        title.textContent = category;
+
+        const grid =
+            document.createElement("div");
+
+        grid.className =
+            "library-grid";
+
+        section.appendChild(title);
+        section.appendChild(grid);
+
+        for (const item of items) {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "library-card";
+
+            let statusText;
+            let statusClass;
+            let button;
+
+            if (item.downloading) {
+
+                statusText = "Installing...";
+                statusClass = "available";
+
+                button = `
+                    <button disabled>
+                        Installing...
+                    </button>
+                `;
+
+            } else if (item.installed) {
+
+                statusText = "Installed";
+                statusClass = "installed";
+
+                button = `
+                    <button
+                        onclick="openEducation()"
+                    >
+                        Open Course
+                    </button>
+                `;
+
+            } else {
+
+                statusText = "Available";
+                statusClass = "available";
+
+                button = `
+                    <button
+                        onclick="
+                            installEducation(
+                                '${item.id}'
+                            )
+                        "
+                    >
+                        Install
+                    </button>
+                `;
+            }
+
+            card.innerHTML = `
+                <h3>${item.name}</h3>
+
+                <p class="library-description">
+                    ${item.description}
+                </p>
+
+                <div class="library-meta">
+
+                    <span>
+                        Khan Academy
+                    </span>
+
+                    <span class="${statusClass}">
+                        ${statusText}
+                    </span>
+
+                </div>
+
+                ${button}
+            `;
+
+            grid.appendChild(card);
+        }
+
+        container.appendChild(section);
+    }
+}
+
+
+async function installEducation(id) {
+    await fetch(
+        `/api/education/install/${id}`,
+        {
+            method: "POST"
+        }
+    );
+
+    await loadEducation();
 }
 
 
@@ -380,6 +575,7 @@ async function initialize() {
     await Promise.all([
         loadKiwixStatus(),
         loadEducationStatus(),
+        loadEducation(),
         loadLibrary(),
         loadSystem(),
     ]);
@@ -392,5 +588,6 @@ initialize();
 setInterval(() => {
     loadKiwixStatus();
     loadEducationStatus();
+    loadEducation();
     loadLibrary();
 }, 5000);

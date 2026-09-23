@@ -1,0 +1,33 @@
+# id|category|name|description|node_id
+
+arithmetic|Math|Arithmetic|Core arithmetic skills and number operations.|4a5293c2249a53fdb491be18b21d8e53
+pre-algebra|Math|Pre-Algebra|Foundations for algebra, equations, ratios, and expressions.|9e006e37eb2a5a2da998d5201ba69680
+algebra-1|Math|Algebra 1|Equations, functions, inequalities, polynomials, and algebra fundamentals.|cb4a011ac01f5dee8f46c16652681769
+geometry|Math|Geometry|Shapes, angles, transformations, proofs, area, and volume.|0f36fc3e9e4c5f8db14de60a9b52e57d
+algebra-2|Math|Algebra 2|Advanced algebra, functions, exponentials, logarithms, and more.|fc2a4b05a30e5006934b9133ad77a89f
+trigonometry|Math|Trigonometry|Trigonometric functions, identities, triangles, and applications.|0124b817c3365724b9e36daaeb2b2149
+precalculus|Math|Precalculus|Functions, complex numbers, vectors, matrices, and preparation for calculus.|8d959400a6ca503990ea9ded452136ee
+statistics|Math|Statistics & Probability|Probability, distributions, data analysis, and statistical inference.|9120612640c95eb8a3797c8b1ef5dd75
+calculus|Math|AP Calculus AB|Limits, derivatives, integrals, and introductory calculus.|eea3ea7f74d55d08bedc6d1d4778e4c8
+linear-algebra|Math|Linear Algebra|Vectors, matrices, transformations, and linear systems.|a65da8b9a5e65fe59cb26299eba1d667
+
+physics|Science|Physics|Mechanics, waves, electricity, energy, and foundational physics.|17d86ace01375570b5e782594d6af4f4
+astronomy|Science|Cosmology & Astronomy|Stars, galaxies, the universe, cosmology, and astronomy.|a4c248b27a695d19bdf8e78d17a72351
+chemistry|Science|Chemistry|Atoms, reactions, bonding, thermodynamics, and general chemistry.|8c23f663a6365140b6c8c448f3b4ef68
+organic-chemistry|Science|Organic Chemistry|Structures, reactions, mechanisms, and organic chemistry concepts.|d61bd680689e5a528efa4e97bd31bdcc
+biology|Science|Biology|Cells, genetics, evolution, ecology, and human biology.|6a347d8f87915306abf3b89e47a49c0b
+electrical-engineering|Science|Electrical Engineering|Circuits, electronics, signals, and electrical engineering basics.|8e239f29fbd25cd88ba8618fad0ffe8b
+
+macroeconomics|Economics|Macroeconomics|Inflation, GDP, monetary policy, economic growth, and national economies.|3d10f24545695caab1cae82c8a1f1ba6
+microeconomics|Economics|Microeconomics|Supply, demand, markets, competition, and individual economic decisions.|c0dedb69ddc85f8791c180dbc719286e
+finance|Economics|Finance & Capital Markets|Interest, investments, banking, stocks, bonds, and financial markets.|f28940fb412357db911ebe7672d84759
+
+us-history|Humanities|US History|Major events, movements, people, and themes in United States history.|619a2a6c050551d997f4077301272bd7
+world-history|Humanities|World History|Civilizations, global events, cultures, and historical developments.|adeff4c0bc1c54b99c965d0361884235
+grammar|Humanities|Grammar|English grammar, sentence structure, punctuation, and language fundamentals.|56ff2fa68d04511c8ffb9034534b585d
+
+financial-literacy|Life Skills|Financial Literacy|Money management, budgeting, credit, saving, and financial decisions.|9003b933f4815012aa00800438892363
+internet-safety|Life Skills|Internet Safety|Safer and more responsible use of the internet.|b155bcbc69f25fa19320bcbc67c56153
+careers|Life Skills|Careers|Career exploration, preparation, and workplace skills.|0809a5808f9b5ca7b4bac62e77570456
+personal-finance|Life Skills|Personal Finance|Saving, spending, taxes, debt, investing, and personal money management.|e3bf824f90285467bef113b08b0558ef
+entrepreneurship|Life Skills|Entrepreneurship|Starting businesses, business models, planning, and entrepreneurship.|38b0f6fbfd6e541ebefd9033435cb92c

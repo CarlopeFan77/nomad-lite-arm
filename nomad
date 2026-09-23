@@ -88,7 +88,30 @@ case "${1:-help}" in
 
     education)
         shift
-        "$SCRIPTS/kolibri.sh" "$@"
+
+        case "${1:-}" in
+
+            start|stop|status)
+                "$SCRIPTS/kolibri.sh" "$@"
+                ;;
+
+            list|info|install)
+                "$SCRIPTS/education-library.sh" "$@"
+                ;;
+
+            *)
+                echo
+                echo "Education commands:"
+                echo "  ./nomad education start"
+                echo "  ./nomad education stop"
+                echo "  ./nomad education status"
+                echo
+                echo "  ./nomad education list"
+                echo "  ./nomad education info COURSE"
+                echo "  ./nomad education install COURSE"
+                echo
+                ;;
+        esac
         ;;
 
     system)
