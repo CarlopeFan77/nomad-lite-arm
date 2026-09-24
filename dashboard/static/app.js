@@ -1,6 +1,21 @@
 let libraryCollections = [];
 let educationCourses = [];
 
+function formatBytes(bytes) {
+    if (!bytes || bytes <= 0) {
+        return "Size unavailable";
+    }
+
+    const mb = bytes / (1024 * 1024);
+
+    if (mb < 1024) {
+        return `${Math.round(mb)} MB`;
+    }
+
+    const gb = mb / 1024;
+
+    return `${gb.toFixed(2)} GB`;
+}
 
 async function loadKiwixStatus() {
     const response = await fetch(
@@ -233,6 +248,26 @@ function renderEducation() {
                 `;
             }
 
+            const totalSize =
+                formatBytes(item.total_bytes);
+
+            const remainingSize =
+                formatBytes(
+                    item.remaining_bytes
+                );
+
+            let sizeText = totalSize;
+
+            if (
+                item.remaining_bytes > 0
+                &&
+                item.remaining_bytes
+                    < item.total_bytes
+            ) {
+                sizeText =
+                    `${remainingSize} needed`;
+            }
+
             card.innerHTML = `
                 <h3>${item.name}</h3>
 
@@ -243,7 +278,7 @@ function renderEducation() {
                 <div class="library-meta">
 
                     <span>
-                        Khan Academy
+                        Approx. ${sizeText}
                     </span>
 
                     <span class="${statusClass}">
@@ -251,6 +286,10 @@ function renderEducation() {
                     </span>
 
                 </div>
+
+                <p class="course-resources">
+                    ${item.resources} resources
+                </p>
 
                 ${button}
             `;

@@ -290,3 +290,48 @@ button:disabled {
         width: 100%;
     }
 }
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 70px;
+}
+
+.section-nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    gap: 8px;
+
+    padding: 10px 24px;
+
+    overflow-x: auto;
+
+    background: #111;
+    border-bottom: 1px solid #333;
+}
+
+.section-nav a {
+    padding: 6px 10px;
+
+    color: #bbb;
+    text-decoration: none;
+
+    border-radius: 6px;
+
+    white-space: nowrap;
+}
+
+.section-nav a:hover {
+    background: #292929;
+    color: #fff;
+}
+
+.course-resources {
+    margin: -6px 0 14px;
+
+    color: #777;
+
+    font-size: 12px;
+}

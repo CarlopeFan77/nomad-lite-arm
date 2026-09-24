@@ -33,6 +33,11 @@ EDUCATION_INSTALLING = (
     / "installing"
 )
 
+EDUCATION_SIZES = (
+    EDUCATION_STATE
+    / "sizes.txt"
+)
+
 NOMAD_COMMAND = PROJECT_DIR / "nomad"
 
 HOST = "127.0.0.1"
@@ -113,11 +118,45 @@ def read_library():
 
     return collections
 
+def read_education_sizes():
+    sizes = {}
+
+    if not EDUCATION_SIZES.exists():
+        return sizes
+
+    for line in EDUCATION_SIZES.read_text().splitlines():
+        line = line.strip()
+
+        if not line:
+            continue
+
+        parts = line.split("|", 3)
+
+        if len(parts) != 4:
+            continue
+
+        (
+            course_id,
+            total_bytes,
+            remaining_bytes,
+            resources,
+        ) = parts
+
+        sizes[course_id] = {
+            "total_bytes": int(total_bytes),
+            "remaining_bytes": int(remaining_bytes),
+            "resources": int(resources),
+        }
+
+    return sizes
+
 def read_education():
     courses = []
 
     if not EDUCATION_CATALOG.exists():
         return courses
+
+    size_data = read_education_sizes()
 
     for line in EDUCATION_CATALOG.read_text().splitlines():
         line = line.strip()
@@ -138,20 +177,49 @@ def read_education():
             node_id,
         ) = parts
 
+        course_sizes = size_data.get(
+            course_id,
+            {
+                "total_bytes": 0,
+                "remaining_bytes": 0,
+                "resources": 0,
+            },
+        )
+
         courses.append(
             {
                 "id": course_id,
                 "category": category,
                 "name": name,
                 "description": description,
+
                 "installed": (
                     EDUCATION_INSTALLED
                     / course_id
                 ).exists(),
+
                 "downloading": (
                     EDUCATION_INSTALLING
                     / course_id
                 ).exists(),
+
+                "total_bytes": (
+                    course_sizes[
+                        "total_bytes"
+                    ]
+                ),
+
+                "remaining_bytes": (
+                    course_sizes[
+                        "remaining_bytes"
+                    ]
+                ),
+
+                "resources": (
+                    course_sizes[
+                        "resources"
+                    ]
+                ),
             }
         )
 

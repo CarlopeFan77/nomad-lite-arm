@@ -131,6 +131,12 @@ install_course() {
     trap - EXIT
 
     echo
+    echo "Updating education size estimates..."
+
+    "$PROJECT_DIR/scripts/education-sizes.sh" \
+        >/dev/null 2>&1 || true
+
+    echo
     echo "$name installed successfully."
 }
 
