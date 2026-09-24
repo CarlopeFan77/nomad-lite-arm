@@ -1,7 +1,10 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 PORT=8080
-ZIM_DIR="$HOME/Projects/nomad-lite-arm/data/zim"
+ZIM_DIR="$PROJECT_DIR/data/zim"
 PID_FILE="$HOME/.kiwix-nomad.pid"
 LOG_FILE="$HOME/.kiwix-nomad.log"
 
