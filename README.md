@@ -108,7 +108,7 @@ Library management:
 ./nomad library remove NAME
 ```
 
-Other tools:
+Other tools (I recommend starting dashboard for full the experience!):
 
 ```bash
 ./nomad system
