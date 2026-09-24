@@ -152,18 +152,55 @@ Other ARM64 Linux devices, including Raspberry Pi-class hardware and other singl
 
 ## Installation
 
-NOMAD Lite is currently in active development and does not yet have an automated installer.
+NOMAD Lite currently supports automated setup on **Debian 12 ARM64/AArch64** systems.
 
-For development and testing, clone the repository:
+Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/CarlopeFan77/nomad-lite-arm.git
 cd nomad-lite-arm
 ```
 
-The project's scripts determine the repository location dynamically, so NOMAD Lite does not need to be installed in a specific directory.
+Before installing anything, you can check whether your system already meets the current requirements:
 
-Automated dependency installation and first-time setup are planned for a future release.
+```bash
+./install.sh --check
+```
+
+To install the required dependencies and prepare NOMAD Lite:
+
+```bash
+./install.sh
+```
+
+The installer currently:
+
+* Verifies that the system is running ARM64/AArch64
+* Verifies Debian 12 compatibility
+* Installs required core packages
+* Installs Kiwix support
+* Installs Kolibri when needed
+* Prepares NOMAD Lite directories and script permissions
+* Verifies the installation when finished
+
+The installer can safely be run again if the required packages are already installed.
+
+After installation, check the system with:
+
+```bash
+./nomad status
+```
+
+Then launch the local dashboard with:
+
+```bash
+./nomad dashboard
+```
+
+NOMAD Lite determines its project directory dynamically, so the repository does not need to be cloned into a specific location.
+
+> **Note:** The automated installer currently targets Debian 12 ARM64 systems. Additional Linux distributions and ARM64 hardware will be supported as they are tested.
+
 
 ## Project Structure
 
@@ -182,13 +219,12 @@ nomad-lite-arm/
 
 Current development priorities include:
 
-* Automated installation and dependency setup
 * Raspberry Pi and additional ARM64 hardware testing
 * External and removable storage support
 * Expanded offline reference library
 * Expanded offline education catalog
 * Improved dashboard controls and status reporting
-* Better first-time setup experience
+* Interactive installation and optional component selection
 * Additional lightweight offline tools
 * Packaged releases for easier installation
 
@@ -211,9 +247,11 @@ NOMAD Lite is being designed for environments such as:
 
 ## Contributing
 
-NOMAD Lite ARM is still early in development, and testing on additional ARM64 hardware would be especially valuable.
+NOMAD Lite ARM is still early in development, and testing on additional ARM64 hardware is especially valuable.
 
 Bug reports, compatibility results, feature suggestions, documentation improvements, and code contributions are welcome.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing guidelines, and contribution information.
 
 ## License
 
