@@ -1,86 +1,94 @@
 # NOMAD Lite ARM
 
-**A lightweight offline knowledge and education environment for ARM64 Linux devices.**
+**A lightweight offline knowledge and education platform for ARM64 Linux devices.**
 
-NOMAD Lite ARM is a local-first toolkit designed to turn low-power ARM64 hardware into a portable offline information system.
+NOMAD Lite ARM is a local-first toolkit designed to turn inexpensive, low-power ARM64 hardware into a portable offline information and education system.
 
-The project combines offline reference libraries, educational content, lightweight local services, and a simple web dashboard into an environment intended for devices such as ARM64 single-board computers, low-cost laptops, Chromebooks, cyberdecks, and other resource-constrained Linux systems.
+The project combines offline reference libraries, structured educational content, lightweight local services, and a simple web dashboard into an environment designed for devices such as Raspberry Pis, ARM64 single-board computers, Chromebooks, cyberdecks, and other resource-constrained Linux systems.
 
-It is inspired by Project NOMAD by Crosstalk Solutions, but is an independent project focused specifically on lightweight ARM64 Linux hardware.
+NOMAD Lite is inspired by Project NOMAD by Crosstalk Solutions, but is an independent project focused on lightweight ARM64 Linux hardware.
 
-> **Project status:** Active development. The current build is being developed and tested on ARM64 Debian Linux. Additional ARM64 devices and distributions have not yet been fully tested.
+> **Project Status:** Active development. The current version is being developed and tested on Debian 12 ARM64. Other ARM64 devices and Linux distributions have not yet been fully tested.
 
 ## Why NOMAD Lite?
 
-A useful offline knowledge system should not require powerful hardware.
+Powerful offline knowledge systems should not require powerful computers.
 
-NOMAD Lite is designed around a few principles:
+NOMAD Lite is being designed around a few core principles:
 
-* Run well on low-power ARM64 hardware
+* Run on inexpensive, low-power ARM64 hardware
 * Remain useful without an internet connection
 * Keep storage requirements configurable
 * Use lightweight and open-source software where practical
-* Provide both reference material and structured educational content
-* Allow large content libraries to live on removable or external storage
-* Provide a simple interface instead of requiring users to manage every service manually
+* Combine reference material with structured educational content
+* Support portable and removable storage
+* Provide a simple interface for managing local services and content
+
+The goal is to create a system that can be useful on a small laptop, Raspberry Pi, single-board computer, or custom cyberdeck without requiring high-end hardware or permanent internet access.
 
 ## Current Features
 
-### Offline reference library
+### Offline Reference Library
 
-NOMAD Lite integrates with **Kiwix** to serve ZIM archives locally.
+NOMAD Lite uses **Kiwix** to serve offline ZIM archives locally.
 
-The library manager can:
+The library system currently supports:
 
-* Display available offline collections
-* Show installed collections
-* Display collection information and storage requirements
-* Download collections
-* Resume interrupted downloads
-* Remove installed collections
+* Browsing available offline collections
+* Viewing installed collections
+* Viewing collection information
+* Displaying download and storage sizes
+* Downloading collections
+* Resuming interrupted downloads
+* Removing installed collections
+* Starting and stopping the Kiwix service
 
-Content can include resources such as encyclopedias, science references, educational material, and other ZIM archives.
+This allows reference material such as encyclopedias and educational resources to remain available without an internet connection.
 
-### Offline education
+### Offline Education
 
-NOMAD Lite integrates with **Kolibri** for structured educational content.
+NOMAD Lite integrates **Kolibri** for structured offline educational content.
 
 The education system currently supports:
 
 * Browsing available courses
 * Viewing course information
+* Viewing estimated download and installed sizes
 * Installing individual courses
-* Tracking installed content
-* Displaying approximate download and storage requirements
-* Starting and stopping the local Kolibri service
+* Tracking installed education content
+* Starting and stopping Kolibri
 
-### Local dashboard
+### Local Dashboard
 
-A lightweight local web dashboard provides a graphical interface for NOMAD Lite.
+NOMAD Lite includes a lightweight local web dashboard for managing the system.
 
-The dashboard can:
+The dashboard currently provides access to:
 
-* View system information
-* Start and stop Kiwix
-* Start and stop Kolibri
-* Browse the offline library
-* Install and remove offline reference collections
-* Browse available educational courses
-* Start education downloads
-* Display installation and download status
+* System information
+* Kiwix status and controls
+* Kolibri status and controls
+* Offline reference libraries
+* Educational content
+* Download and installation status
 
-The dashboard runs locally and does not require an external web service.
+The dashboard runs locally and does not depend on an external web service.
 
-### Command-line interface
+### Command-Line Interface
 
-Most NOMAD Lite functions can also be controlled through the main `nomad` command.
+NOMAD Lite can also be controlled from the terminal using the main `nomad` command.
 
-```text
+Examples:
+
+```bash
 ./nomad start
 ./nomad stop
 ./nomad restart
 ./nomad status
+```
 
+Service controls:
+
+```bash
 ./nomad kiwix start
 ./nomad kiwix stop
 ./nomad kiwix status
@@ -88,39 +96,33 @@ Most NOMAD Lite functions can also be controlled through the main `nomad` comman
 ./nomad education start
 ./nomad education stop
 ./nomad education status
+```
 
+Library management:
+
+```bash
 ./nomad library list
 ./nomad library installed
 ./nomad library info NAME
 ./nomad library install NAME
 ./nomad library remove NAME
+```
 
+Other tools:
+
+```bash
 ./nomad system
 ./nomad dashboard
 ```
 
-## Current Test System
-
-Development currently takes place on an **Acer Chromebook Spin 311** running the ChromeOS Linux Development Environment.
-
-Current development hardware:
-
-* MediaTek Kompanio 500
-* ARM64 / AArch64
-* 4 GB RAM
-* 32 GB internal storage
-* Debian 12
-* ChromeOS Linux Development Environment
-
-The intentionally modest hardware acts as a baseline for keeping the project lightweight.
-
 ## Requirements
 
-NOMAD Lite currently targets an **ARM64/AArch64 Linux environment**.
+NOMAD Lite currently targets **64-bit ARM Linux systems**, also known as **ARM64** or **AArch64**.
 
-Core software used by the project includes:
+Current software requirements include:
 
-* Linux
+* ARM64 / AArch64 processor
+* Debian-based Linux environment
 * Bash
 * Python 3
 * Kiwix / `kiwix-serve`
@@ -128,27 +130,34 @@ Core software used by the project includes:
 * `curl`
 * Standard GNU/Linux command-line utilities
 
-The local dashboard currently uses the Python standard library and does not require a separate set of third-party Python packages.
+The dashboard currently relies primarily on Python's standard library and does not require a separate Python dependency file.
 
-### Compatibility
+### Current Compatibility
 
-The project is currently tested on Debian 12 ARM64.
+NOMAD Lite is currently developed and tested on:
 
-Other ARM64 Linux systems—including ARM64 single-board computers and Raspberry Pi-class devices—are intended targets, but should be considered unverified until they have been tested.
+* ARM64 / AArch64
+* Debian 12
+* ChromeOS Linux Development Environment
 
-32-bit ARM systems are not currently a supported target.
+Other ARM64 Linux devices, including Raspberry Pi-class hardware and other single-board computers, are intended targets but should currently be considered **untested** until compatibility is verified.
+
+32-bit ARM systems are not currently supported.
 
 ## Installation
 
-Installation is currently intended for development and testing.
+NOMAD Lite is currently in active development and does not yet have an automated installer.
 
-Some scripts still expect the project to exist at:
+For development and testing, clone the repository:
 
-```text
-~/Projects/nomad-lite-arm
+```bash
+git clone <repository-url>
+cd nomad-lite-arm
 ```
 
-Portable installation support and automated dependency setup are planned before the first stable release.
+The project's scripts determine the repository location dynamically, so NOMAD Lite does not need to be installed in a specific directory.
+
+Automated dependency installation and first-time setup are planned for a future release.
 
 ## Project Structure
 
@@ -159,6 +168,7 @@ nomad-lite-arm/
 ├── data/         # Local content and application state
 ├── scripts/      # Service and library management scripts
 ├── nomad         # Main NOMAD Lite command
+├── LICENSE
 └── README.md
 ```
 
@@ -166,37 +176,46 @@ nomad-lite-arm/
 
 Current development priorities include:
 
-* Remove hard-coded installation paths
-* Improve installation and first-time setup
-* Expand the offline content catalog
-* Improve download and storage reporting
-* Test Raspberry Pi and other ARM64 Linux hardware
-* Add support for external/removable storage
-* Improve dashboard controls and status reporting
-* Add additional lightweight offline tools
-* Create packaged releases for easier installation
+* Automated installation and dependency setup
+* Raspberry Pi and additional ARM64 hardware testing
+* External and removable storage support
+* Expanded offline reference library
+* Expanded offline education catalog
+* Improved dashboard controls and status reporting
+* Better first-time setup experience
+* Additional lightweight offline tools
+* Packaged releases for easier installation
 
-Longer-term, the goal is to make NOMAD Lite a simple platform for building portable offline knowledge systems on inexpensive ARM64 hardware.
+Longer-term, the goal is to make NOMAD Lite a flexible platform for building portable offline knowledge systems on inexpensive ARM64 hardware.
 
-## Use Cases
+## Potential Use Cases
 
-NOMAD Lite is being designed with several environments in mind:
+NOMAD Lite is being designed for environments such as:
 
-* Raspberry Pi and ARM64 single-board computers
+* Raspberry Pi systems
+* ARM64 single-board computers
 * Cyberdecks and portable computing builds
 * Low-cost ARM laptops and Chromebooks
 * Offline educational systems
 * Portable reference libraries
-* Emergency or disconnected information systems
-* Homelabs and self-hosted experimentation
+* Emergency and disconnected information systems
+* Homelabs
+* Field computing
+* Self-hosted experimentation
 
 ## Contributing
 
-NOMAD Lite ARM is still early in development.
+NOMAD Lite ARM is still early in development, and testing on additional ARM64 hardware would be especially valuable.
 
-Testing on additional ARM64 Linux hardware, bug reports, compatibility results, feature suggestions, and contributions are welcome.
+Bug reports, compatibility results, feature suggestions, documentation improvements, and code contributions are welcome.
 
-## Inspiration
+## License
+
+NOMAD Lite ARM is licensed under the **Apache License 2.0**.
+
+See the `LICENSE` file for details.
+
+## Acknowledgements
 
 NOMAD Lite ARM is inspired by **Project NOMAD by Crosstalk Solutions**.
 
