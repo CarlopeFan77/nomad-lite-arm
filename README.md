@@ -10,6 +10,12 @@ NOMAD Lite is inspired by Project NOMAD by Crosstalk Solutions, but is an indepe
 
 > **Project Status:** Active development. The current version is being developed and tested on Debian 12 ARM64. Other ARM64 devices and Linux distributions have not yet been fully tested.
 
+<p align="center">
+  <img src="docs/images/dashboard-overview.png"
+       alt="NOMAD Lite dashboard"
+       width="900">
+</p>
+
 ## Why NOMAD Lite?
 
 Powerful offline knowledge systems should not require powerful computers.
