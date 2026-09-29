@@ -128,7 +128,27 @@ prepare_project() {
             -exec chmod +x {} +
     fi
 
-    mkdir -p "$PROJECT_DIR/data/zim"
+    mkdir -p \
+        "$PROJECT_DIR/data/zim" \
+        "$PROJECT_DIR/data/maps" \
+        "$PROJECT_DIR/.run"
+}
+
+install_optional_maps() {
+    local map_installer
+
+    map_installer="$PROJECT_DIR/scripts/install-maps.py"
+
+    if [[ ! -f "$map_installer" ]]; then
+        info "Map installer not found. Skipping offline maps."
+        return
+    fi
+
+    printf '\n'
+
+    info "Configuring optional offline maps..."
+
+    python3 "$map_installer"
 }
 
 verify_installation() {
@@ -210,6 +230,7 @@ main() {
     install_core_packages
     install_kolibri
     prepare_project
+    install_optional_maps
     verify_installation
 
     printf '\n'

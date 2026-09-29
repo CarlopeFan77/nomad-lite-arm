@@ -1,6 +1,9 @@
 let libraryCollections = [];
 let educationCourses = [];
 
+let mapsUrl =
+    "http://localhost:8083/map";
+
 function formatBytes(bytes) {
     if (!bytes || bytes <= 0) {
         return "Size unavailable";
@@ -81,6 +84,90 @@ async function loadEducationStatus() {
         openButton.disabled = true;
     }
 }
+
+
+async function loadMapsStatus() {
+    const response = await fetch(
+        "/api/maps/status"
+    );
+
+    const data = await response.json();
+
+    const status =
+        document.getElementById(
+            "maps-status"
+        );
+
+    const openButton =
+        document.getElementById(
+            "open-maps-button"
+        );
+
+
+    if (data.url) {
+        mapsUrl = data.url;
+    }
+
+
+    if (data.running) {
+
+        status.textContent =
+            "Running";
+
+        status.className =
+            "service-status installed";
+
+        openButton.disabled =
+            false;
+
+    } else {
+
+        status.textContent =
+            "Stopped";
+
+        status.className =
+            "service-status available";
+
+        openButton.disabled =
+            true;
+    }
+}
+
+
+async function startMaps() {
+
+    await fetch(
+        "/api/maps/start",
+        {
+            method: "POST"
+        }
+    );
+
+    await loadMapsStatus();
+}
+
+
+async function stopMaps() {
+
+    await fetch(
+        "/api/maps/stop",
+        {
+            method: "POST"
+        }
+    );
+
+    await loadMapsStatus();
+}
+
+
+function openMaps() {
+
+    window.open(
+        mapsUrl,
+        "_blank"
+    );
+}
+
 
 
 async function loadSystem() {
@@ -614,6 +701,7 @@ async function initialize() {
     await Promise.all([
         loadKiwixStatus(),
         loadEducationStatus(),
+        loadMapsStatus(),
         loadEducation(),
         loadLibrary(),
         loadSystem(),
@@ -627,6 +715,7 @@ initialize();
 setInterval(() => {
     loadKiwixStatus();
     loadEducationStatus();
+    loadMapsStatus();
     loadEducation();
     loadLibrary();
 }, 5000);

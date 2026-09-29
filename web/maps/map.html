@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>NOMAD Maps</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/maplibre-gl.css"
+    >
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+
+            font-family:
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: #f3f0e7;
+        }
+
+        #map {
+            position: absolute;
+            inset: 0;
+        }
+
+        #map-info {
+            position: absolute;
+
+            top: 12px;
+            left: 12px;
+
+            z-index: 10;
+
+            padding: 10px 14px;
+
+            background:
+                rgba(20, 20, 20, 0.88);
+
+            color: white;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+            line-height: 1.5;
+
+            pointer-events: none;
+
+            box-shadow:
+                0 2px 8px
+                rgba(0, 0, 0, 0.25);
+        }
+
+        #map-info strong {
+            font-size: 14px;
+        }
+
+        #status {
+            color: #a6e3a1;
+        }
+        #legend {
+            position: absolute;
+
+            left: 12px;
+            bottom: 48px;
+
+            z-index: 10;
+
+            padding: 12px 14px;
+
+            background:
+                rgba(255, 255, 255, 0.92);
+
+            color: #222;
+
+            border-radius: 8px;
+
+            font-size: 12px;
+            line-height: 1.6;
+
+            box-shadow:
+                0 2px 8px
+                rgba(0, 0, 0, 0.20);
+        }
+
+        #legend strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-line {
+            width: 24px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .legend-water {
+            background: #78b4d2;
+        }
+
+        .legend-road {
+            background: #b7b1a4;
+        }
+
+        .legend-major {
+            background: #d58b52;
+        }
+
+        .legend-boundary {
+            width: 24px;
+            border-top:
+                2px dashed #777777;
+        }
+
+        .legend-place {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #333333;
+
+            border: 1px solid white;
+
+            box-shadow:
+                0 0 0 1px #777;
+        }
+        #terrain-controls {
+            position: absolute;
+
+            right: 12px;
+            bottom: 28px;
+
+            z-index: 10;
+
+            padding: 12px 14px;
+
+            background:
+                rgba(255, 255, 255, 0.92);
+
+            color: #222;
+
+            border-radius: 8px;
+
+            font-size: 12px;
+            line-height: 1.8;
+
+            box-shadow:
+                0 2px 8px
+                rgba(0, 0, 0, 0.20);
+        }
+
+        #terrain-controls strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+
+        #terrain-controls label {
+            display: block;
+            cursor: pointer;
+        }
+
+        #terrain-controls input {
+            margin-right: 6px;
+        }
+
+        .terrain-note {
+            margin-top: 4px;
+            color: #666;
+            font-size: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<div id="map-info">
+    <strong>NOMAD Maps</strong>
+    <br>
+
+    <span id="map-region">
+        Loading map...
+    </span>
+
+    <br>
+
+    <span id="status">
+        Loading local map...
+    </span>
+
+    <br>
+
+    Zoom:
+    <span id="zoom">--</span>
+</div>
+
+<div id="legend">
+
+    <strong>Map Legend</strong>
+
+    <div class="legend-row">
+        <span
+            class="legend-line legend-major"
+        ></span>
+        Major road
+    </div>
+
+    <div class="legend-row">
+        <span
+            class="legend-line legend-road"
+        ></span>
+        Local road
+    </div>
+
+    <div class="legend-row">
+        <span
+            class="legend-line legend-water"
+        ></span>
+        River / water
+    </div>
+
+    <div class="legend-row">
+        <span
+            class="legend-boundary"
+        ></span>
+        Boundary
+    </div>
+
+    <div class="legend-row">
+        <span
+            class="legend-place"
+        ></span>
+        Town / city
+    </div>
+
+</div>
+
+<div id="terrain-controls">
+
+    <strong>Terrain</strong>
+
+    <label>
+        <input
+            type="checkbox"
+            id="hillshade-toggle"
+            checked
+        >
+        Hillshade
+    </label>
+
+    <label>
+        <input
+            type="checkbox"
+            id="contour-toggle"
+            checked
+        >
+        Contours
+    </label>
+
+    <label>
+        <input
+            type="checkbox"
+            id="terrain-toggle"
+        >
+        3D terrain
+    </label>
+
+    <div
+        class="terrain-note"
+        id="terrain-note"
+    >
+        Loading topo data...
+    </div>
+
+
+</div>
+
+<script type="module">
+
+import * as maplibregl
+    from "/static/maplibre-gl.mjs";
+
+// --------------------------------------------------
+// Load selected state configuration
+// --------------------------------------------------
+
+const configResponse =
+    await fetch(
+        "/api/config"
+    );
+
+
+if (!configResponse.ok) {
+
+    throw new Error(
+        "Unable to load map configuration."
+    );
+}
+
+
+const MAP_CONFIG =
+    await configResponse.json();
+
+const HAS_BASIC =
+    MAP_CONFIG
+        .packages
+        .basic
+        .installed === true;
+
+
+const HAS_TERRAIN =
+    MAP_CONFIG
+        .packages
+        .terrain
+        .installed === true;
+
+
+const HAS_CONTOURS =
+    MAP_CONFIG
+        .packages
+        .contours
+        .installed === true;
+
+
+const HAS_TOPO =
+    HAS_TERRAIN
+    && HAS_CONTOURS;
+
+
+if (!HAS_BASIC) {
+
+    throw new Error(
+        "Basic map package is not installed."
+    );
+}
+
+document.title =
+    `NOMAD Maps — ${MAP_CONFIG.name}`;
+
+
+document.getElementById(
+    "map-region"
+).textContent =
+    MAP_CONFIG.name
+    + " "
+    + (
+        HAS_TOPO
+            ? "Topo"
+            : "Basic"
+    );
+
+
+const terrainControls =
+    document.getElementById(
+        "terrain-controls"
+    );
+
+
+if (!HAS_TOPO) {
+
+    terrainControls.style.display =
+        "none";
+}
+
+
+document.getElementById(
+    "terrain-note"
+).textContent =
+    "Offline Topo"
+    + " • DEM z"
+    + MAP_CONFIG
+        .packages
+        .terrain
+        .minzoom
+    + "–"
+    + MAP_CONFIG
+        .packages
+        .terrain
+        .maxzoom
+    + " • Contours z"
+    + MAP_CONFIG
+        .packages
+        .contours
+        .minzoom
+    + "–"
+    + MAP_CONFIG
+        .packages
+        .contours
+        .maxzoom;
+
+
+const STATE_BOUNDS = [
+
+    [
+        MAP_CONFIG.bounds[0],
+        MAP_CONFIG.bounds[1]
+    ],
+
+    [
+        MAP_CONFIG.bounds[2],
+        MAP_CONFIG.bounds[3]
+    ]
+];
+
+
+const MAX_BOUNDS = [
+
+    [
+        MAP_CONFIG.max_bounds[0],
+        MAP_CONFIG.max_bounds[1]
+    ],
+
+    [
+        MAP_CONFIG.max_bounds[2],
+        MAP_CONFIG.max_bounds[3]
+    ]
+];
+
+
+const mapOptions = {
+
+    container: "map",
+
+    center:
+        MAP_CONFIG.center,
+
+    zoom:
+        MAP_CONFIG.zoom,
+
+    minZoom: 5,
+
+    maxZoom: 18,
+
+    maxBounds:
+        MAX_BOUNDS,
+
+    style: {
+
+        version: 8,
+
+        sources: {
+
+            "basic-map": {
+
+                type: "vector",
+
+                tiles: [
+                    "/tiles/{z}/{x}/{y}.pbf"
+                ],
+
+                minzoom:
+                    MAP_CONFIG
+                        .packages
+                        .basic
+                        .minzoom,
+
+                maxzoom:
+                    MAP_CONFIG
+                        .packages
+                        .basic
+                        .maxzoom,
+
+                attribution:
+                    "© OpenStreetMap contributors"
+            },
+
+
+            "terrain-dem": {
+
+                type: "raster-dem",
+
+                tiles: [
+                    "/terrain/{z}/{x}/{y}.png"
+                ],
+
+                tileSize: 256,
+
+                encoding: "terrarium",
+
+                minzoom:
+                    MAP_CONFIG
+                        .packages
+                        .terrain
+                        .minzoom,
+
+                maxzoom:
+                    MAP_CONFIG
+                        .packages
+                        .terrain
+                        .maxzoom,
+
+                bounds:
+                    MAP_CONFIG.bounds,
+
+                attribution:
+                    "Terrain data: Mapzen / AWS Terrain Tiles"
+            },
+
+
+            "contours": {
+
+                type: "vector",
+
+                tiles: [
+                    "/contours/{z}/{x}/{y}.pbf"
+                ],
+
+                minzoom:
+                    MAP_CONFIG
+                        .packages
+                        .contours
+                        .minzoom,
+
+                maxzoom:
+                    MAP_CONFIG
+                        .packages
+                        .contours
+                        .maxzoom,
+
+                attribution:
+                    "Elevation data: Mapzen / Tilezen"
+            }
+
+
+        },
+
+        layers: [
+
+            // -------------------------------------
+            // Background
+            // -------------------------------------
+
+            {
+                id: "background",
+                type: "background",
+
+                paint: {
+                    "background-color": "#f3f0e7"
+                }
+            },
+
+
+            // -------------------------------------
+            // Land use
+            // -------------------------------------
+
+            {
+                id: "land",
+                type: "fill",
+
+                source: "basic-map",
+                "source-layer": "land",
+
+                paint: {
+
+                    "fill-color": [
+                        "match",
+
+                        ["get", "kind"],
+
+                        [
+                            "forest",
+                            "wood"
+                        ],
+                        "#d9e5cd",
+
+                        [
+                            "park",
+                            "grass",
+                            "meadow"
+                        ],
+                        "#e3ead5",
+
+                        [
+                            "farmland",
+                            "farmyard"
+                        ],
+                        "#eee7cd",
+
+                        "#eae5d8"
+                    ],
+
+                    "fill-opacity": 0.55
+                }
+            },
+
+            // -------------------------------------
+            // Terrain hillshade
+            // -------------------------------------
+
+            {
+                id: "terrain-hillshade",
+
+                type: "hillshade",
+
+                source: "terrain-dem",
+
+                paint: {
+
+                    "hillshade-method":
+                        "standard",
+
+                    "hillshade-exaggeration":
+                        0.45,
+
+                    "hillshade-illumination-direction":
+                        315,
+
+                    "hillshade-shadow-color":
+                        "rgba(45, 40, 35, 0.55)",
+
+                    "hillshade-highlight-color":
+                        "rgba(255, 255, 245, 0.45)",
+
+                    "hillshade-accent-color":
+                        "rgba(80, 70, 60, 0.35)"
+                }
+            },
+
+
+            // -------------------------------------
+            // 40 ft minor contours
+            // -------------------------------------
+
+            {
+                id: "minor-contours",
+
+                type: "line",
+
+                minzoom: 12,
+
+                source: "contours",
+
+                "source-layer":
+                    "minor_contours",
+
+                paint: {
+
+                    "line-color":
+                        "#9a7654",
+
+                    "line-opacity": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        12, 0.45,
+
+                        14, 0.60,
+
+                        18, 0.70
+                    ],
+
+                    "line-width": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        12, 0.45,
+
+                        14, 0.7,
+
+                        18, 1.0
+                    ]
+                }
+            },
+
+
+            // -------------------------------------
+            // 200 ft index contours
+            // -------------------------------------
+
+            {
+                id: "major-contours",
+
+                type: "line",
+
+                minzoom: 10,
+
+                source: "contours",
+
+                "source-layer":
+                    "major_contours",
+
+                paint: {
+
+                    "line-color":
+                        "#765335",
+
+                    "line-opacity":
+                        0.82,
+
+                    "line-width": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        10, 0.75,
+
+                        12, 1.0,
+
+                        14, 1.35,
+
+                        18, 1.8
+                    ]
+                }
+            },
+
+            // -------------------------------------
+            // Water
+            // -------------------------------------
+
+            {
+                id: "water-polygons",
+
+                type: "fill",
+
+                source: "basic-map",
+
+                "source-layer":
+                    "water_polygons",
+
+                paint: {
+
+                    "fill-color":
+                        "#9ecae1",
+
+                    "fill-opacity":
+                        0.9
+                }
+            },
+
+
+            {
+                id: "water-lines",
+
+                type: "line",
+
+                source: "basic-map",
+
+                "source-layer":
+                    "water_lines",
+
+                paint: {
+
+                    "line-color":
+                        "#78b4d2",
+
+                    "line-width": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        8, 0.6,
+
+                        14, 2
+                    ]
+                }
+            },
+
+
+            // -------------------------------------
+            // State / country boundaries
+            // -------------------------------------
+
+            {
+                id: "boundaries",
+
+                type: "line",
+
+                source: "basic-map",
+
+                "source-layer":
+                    "boundaries",
+
+                paint: {
+
+                    "line-color":
+                        "#777777",
+
+                    "line-width": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        5, 0.7,
+
+                        10, 1.4
+                    ],
+
+                    "line-dasharray":
+                        [3, 2]
+                }
+            },
+
+
+            // -------------------------------------
+            // General road network
+            // -------------------------------------
+
+            {
+                id: "roads",
+
+                type: "line",
+
+                source: "basic-map",
+
+                "source-layer":
+                    "streets",
+
+                paint: {
+
+                    "line-color":
+                        "#b7b1a4",
+
+                    "line-width": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        5, 0.4,
+
+                        10, 1.1,
+
+                        14, 2.2,
+
+                        18, 4
+                    ],
+
+                    "line-opacity":
+                        0.85
+                }
+            },
+
+
+            // -------------------------------------
+            // Major roads
+            // -------------------------------------
+
+            {
+                id: "major-roads",
+
+                type: "line",
+
+                source: "basic-map",
+
+                "source-layer":
+                    "streets",
+
+                filter: [
+
+                    "match",
+
+                    ["get", "kind"],
+
+                    [
+                        "motorway",
+                        "trunk",
+                        "primary"
+                    ],
+
+                    true,
+                    false
+                ],
+
+                paint: {
+
+                    "line-color":
+                        "#d58b52",
+
+                    "line-width": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        5, 0.8,
+
+                        10, 2,
+
+                        14, 4,
+
+                        18, 7
+                    ]
+                }
+            },
+
+
+            // -------------------------------------
+            // Buildings
+            // Shortbread buildings begin at z14.
+            // -------------------------------------
+
+            {
+                id: "buildings",
+
+                type: "fill",
+
+                minzoom: 14,
+
+                source: "basic-map",
+
+                "source-layer":
+                    "buildings",
+
+                paint: {
+
+                    "fill-color":
+                        "#c8c1b5",
+
+                    "fill-outline-color":
+                        "#aba398"
+                }
+            },
+
+
+            // -------------------------------------
+            // Index contour elevation labels
+            // -------------------------------------
+
+            {
+                id: "contour-labels",
+
+                type: "symbol",
+
+                minzoom: 12,
+
+                source: "contours",
+
+                "source-layer":
+                    "major_contours",
+
+                layout: {
+
+                    "symbol-placement":
+                        "line",
+
+                    "symbol-spacing":
+                        350,
+
+                    "text-field": [
+                        "concat",
+                        [
+                            "to-string",
+                            ["get", "elev_ft"]
+                        ],
+                        " ft"
+                    ],
+
+                    "text-font": [
+                        "DejaVu Sans",
+                        "Liberation Sans",
+                        "Arial",
+                        "sans-serif"
+                    ],
+
+                    "text-size": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        12, 9,
+
+                        15, 10,
+
+                        18, 11
+                    ],
+
+                    "text-max-angle":
+                        30,
+
+                    "text-keep-upright":
+                        true,
+
+                    "text-padding":
+                        6
+                },
+
+                paint: {
+
+                    "text-color":
+                        "#67472e",
+
+                    "text-halo-color":
+                        "rgba(248, 246, 239, 0.90)",
+
+                    "text-halo-width":
+                        1.5
+                }
+            },
+
+            // -------------------------------------
+            // Road labels
+            // -------------------------------------
+
+            {
+                id: "road-labels",
+
+                type: "symbol",
+
+                minzoom: 10,
+
+                source: "basic-map",
+
+                "source-layer":
+                    "street_labels",
+
+                layout: {
+
+                    "symbol-placement":
+                        "line",
+
+                    "text-field": [
+                        "coalesce",
+                        ["get", "name"],
+                        ["get", "ref"],
+                        ""
+                    ],
+
+                    "text-font": [
+                        "DejaVu Sans",
+                        "Liberation Sans",
+                        "Arial",
+                        "sans-serif"
+                    ],
+
+                    "text-size": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        10, 10,
+
+                        14, 12,
+
+                        18, 14
+                    ],
+
+                    "text-max-angle":
+                        30,
+
+                    "text-padding":
+                        4
+                },
+
+                paint: {
+
+                    "text-color":
+                        "#5c574f",
+
+                    "text-halo-color":
+                        "#f3f0e7",
+
+                    "text-halo-width":
+                        2
+                }
+            },
+
+
+            // -------------------------------------
+            // Town / city points
+            // -------------------------------------
+
+            {
+                id: "places",
+
+                type: "circle",
+
+                source: "basic-map",
+
+                "source-layer":
+                    "place_labels",
+
+                paint: {
+
+                    "circle-radius": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+
+                        5, 2.5,
+
+                        10, 4,
+
+                        14, 5
+                    ],
+
+                    "circle-color":
+                        "#333333",
+
+                    "circle-stroke-color":
+                        "#ffffff",
+
+                    "circle-stroke-width":
+                        1
+                }
+            },
+
+
+            // -------------------------------------
+            // Town / city names
+            // -------------------------------------
+
+            {
+                id: "place-names",
+
+                type: "symbol",
+
+                source: "basic-map",
+
+                "source-layer":
+                    "place_labels",
+
+                layout: {
+
+                    "text-field":
+                        ["get", "name"],
+
+                    "text-font": [
+                        "DejaVu Sans",
+                        "Liberation Sans",
+                        "Arial",
+                        "sans-serif"
+                    ],
+
+                    "text-size": [
+                        "match",
+
+                        ["get", "kind"],
+
+                        "capital",
+                        17,
+
+                        "city",
+                        16,
+
+                        "town",
+                        13,
+
+                        "village",
+                        11,
+
+                        "hamlet",
+                        10,
+
+                        11
+                    ],
+
+                    "text-offset":
+                        [0, 0.8],
+
+                    "text-anchor":
+                        "top",
+
+                    "text-padding":
+                        4,
+
+                    "text-allow-overlap":
+                        false,
+
+                    "text-ignore-placement":
+                        false
+                },
+
+                paint: {
+
+                    "text-color":
+                        "#222222",
+
+                    "text-halo-color":
+                        "#f8f6ef",
+
+                    "text-halo-width":
+                        2
+                }
+            }
+
+        ]
+    }
+};
+
+
+// --------------------------------------------------
+// Remove optional Topo components when unavailable
+// --------------------------------------------------
+
+if (!HAS_TERRAIN) {
+
+    delete mapOptions
+        .style
+        .sources[
+            "terrain-dem"
+        ];
+
+
+    mapOptions.style.layers =
+        mapOptions.style.layers.filter(
+            (layer) =>
+                layer.source
+                !== "terrain-dem"
+        );
+}
+
+
+if (!HAS_CONTOURS) {
+
+    delete mapOptions
+        .style
+        .sources[
+            "contours"
+        ];
+
+
+    mapOptions.style.layers =
+        mapOptions.style.layers.filter(
+            (layer) =>
+                layer.source
+                !== "contours"
+        );
+}
+
+
+const map =
+    new maplibregl.Map(
+        mapOptions
+    );
+
+map.addControl(
+    new maplibregl.NavigationControl(),
+    "top-right"
+);
+
+
+// --------------------------------------------------
+// Dynamic map scale
+// --------------------------------------------------
+
+const scaleControl =
+    new maplibregl.ScaleControl({
+
+        maxWidth: 120,
+
+        unit: "imperial"
+    });
+
+
+map.addControl(
+    scaleControl,
+    "bottom-left"
+);
+
+map.on(
+    "load",
+    () => {
+
+        document.getElementById(
+            "status"
+        ).textContent =
+            "Map loaded";
+
+        updateZoom();
+
+
+        // ----------------------------------------
+        // Hillshade toggle
+        // ----------------------------------------
+
+        const hillshadeToggle =
+            document.getElementById(
+                "hillshade-toggle"
+            );
+
+        hillshadeToggle.addEventListener(
+            "change",
+            () => {
+
+                map.setLayoutProperty(
+                    "terrain-hillshade",
+                    "visibility",
+                    hillshadeToggle.checked
+                        ? "visible"
+                        : "none"
+                );
+            }
+        );
+
+
+        // ----------------------------------------
+        // Contour toggle
+        // ----------------------------------------
+
+        const contourToggle =
+            document.getElementById(
+                "contour-toggle"
+            );
+
+        contourToggle.addEventListener(
+            "change",
+            () => {
+
+                const visibility =
+                    contourToggle.checked
+                        ? "visible"
+                        : "none";
+
+                map.setLayoutProperty(
+                    "minor-contours",
+                    "visibility",
+                    visibility
+                );
+
+                map.setLayoutProperty(
+                    "major-contours",
+                    "visibility",
+                    visibility
+                );
+
+                map.setLayoutProperty(
+                    "contour-labels",
+                    "visibility",
+                    visibility
+                );
+            }
+        );
+
+        // ----------------------------------------
+        // 3D terrain toggle
+        // ----------------------------------------
+
+        const terrainToggle =
+            document.getElementById(
+                "terrain-toggle"
+            );
+
+        terrainToggle.addEventListener(
+            "change",
+            () => {
+
+                if (
+                    terrainToggle.checked
+                ) {
+
+                    map.setTerrain({
+
+                        source:
+                            "terrain-dem",
+
+                        exaggeration:
+                            1.15
+                    });
+
+                    map.easeTo({
+
+                        pitch: 55,
+
+                        duration: 700
+                    });
+
+                } else {
+
+                    map.setTerrain(
+                        null
+                    );
+
+                    map.easeTo({
+
+                        pitch: 0,
+
+                        bearing: 0,
+
+                        duration: 700
+                    });
+                }
+            }
+        );
+    }
+);
+
+
+function updateZoom() {
+
+    document.getElementById(
+        "zoom"
+    ).textContent =
+        map.getZoom().toFixed(1);
+}
+
+
+map.on(
+    "zoom",
+    updateZoom
+);
+
+
+// --------------------------------------------------
+// Click a town/city dot to show its name.
+// --------------------------------------------------
+
+map.on(
+    "click",
+    "places",
+    (event) => {
+
+        const feature =
+            event.features[0];
+
+        const name =
+            feature.properties.name
+            || "Unnamed place";
+
+        const kind =
+            feature.properties.kind
+            || "place";
+
+        new maplibregl.Popup()
+            .setLngLat(
+                event.lngLat
+            )
+            .setHTML(
+                "<strong>"
+                + name
+                + "</strong><br>"
+                + kind
+            )
+            .addTo(map);
+    }
+);
+
+
+map.on(
+    "mouseenter",
+    "places",
+    () => {
+
+        map.getCanvas().style.cursor =
+            "pointer";
+    }
+);
+
+
+map.on(
+    "mouseleave",
+    "places",
+    () => {
+
+        map.getCanvas().style.cursor =
+            "";
+    }
+);
+
+
+// --------------------------------------------------
+// Error reporting
+// --------------------------------------------------
+
+map.on(
+    "error",
+    (event) => {
+
+        console.error(
+            "MapLibre error:",
+            event.error
+        );
+
+        document.getElementById(
+            "status"
+        ).textContent =
+            "Map error - check console";
+    }
+);
+
+</script>
+
+</body>
+</html>

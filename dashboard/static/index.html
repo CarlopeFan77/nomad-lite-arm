@@ -136,6 +136,49 @@
 
                 </div>
 
+                <div class="panel service-card">
+
+                    <div>
+                        <h3>Maps</h3>
+
+                        <p>
+                            Offline maps and topographic terrain
+                        </p>
+
+                        <div
+                            id="maps-status"
+                            class="service-status"
+                        >
+                            Checking...
+                        </div>
+                    </div>
+
+                    <div class="buttons">
+
+                        <button
+                            onclick="startMaps()"
+                        >
+                            Start
+                        </button>
+
+                        <button
+                            onclick="stopMaps()"
+                        >
+                            Stop
+                        </button>
+
+                        <button
+                            id="open-maps-button"
+                            onclick="openMaps()"
+                            disabled
+                        >
+                            Open Maps
+                        </button>
+
+                    </div>
+
+                </div>
+
             </div>
         </section>
 
@@ -216,7 +259,7 @@ Loading...
     </footer>
 
 
-    <script src="app.js"></script>
+    <script src="app.js?v=2"></script>
 
 </body>
 

@@ -34,6 +34,16 @@ show_help() {
     echo "  education stop            Stop Kolibri"
     echo "  education status          Show Kolibri status"
     echo
+    echo "  maps start                Start offline Maps"
+    echo "  maps stop                 Stop offline Maps"
+    echo "  maps restart              Restart offline Maps"
+    echo "  maps status               Show Maps status"
+    echo "  maps open                 Open Maps in browser"
+    echo "  maps logs                 Show recent Maps logs"
+    echo "  maps list                 Show configured map states"
+    echo "  maps info STATE           Show installed map packages"
+    echo "  maps validate             Validate map configuration"
+    echo
     echo "  system                    Show system information"
     echo "  dashboard                 Start web dashboard"
     echo
@@ -53,19 +63,23 @@ case "${1:-help}" in
     start)
         "$SCRIPTS/kiwix.sh" start
         "$SCRIPTS/kolibri.sh" start
+        "$SCRIPTS/maps.sh" start
         ;;
 
     stop)
         "$SCRIPTS/kiwix.sh" stop
         "$SCRIPTS/kolibri.sh" stop
+        "$SCRIPTS/maps.sh" stop
         ;;
 
     restart)
         "$SCRIPTS/kiwix.sh" stop
         "$SCRIPTS/kolibri.sh" stop
+        "$SCRIPTS/maps.sh" stop
 
         "$SCRIPTS/kiwix.sh" start
         "$SCRIPTS/kolibri.sh" start
+        "$SCRIPTS/maps.sh" start
         ;;
 
     status)
@@ -78,6 +92,12 @@ case "${1:-help}" in
         echo "Kolibri"
         echo "--------------------------------"
         "$SCRIPTS/kolibri.sh" status
+
+        echo
+        echo "Maps"
+        echo "--------------------------------"
+        "$SCRIPTS/maps.sh" status
+
         echo
         ;;
 
@@ -116,6 +136,32 @@ case "${1:-help}" in
 
     system)
         "$SCRIPTS/system-info.sh"
+        ;;
+
+    maps)
+        shift
+
+        case "${1:-}" in
+
+            start|stop|restart|status|open|logs|list|info|validate)
+                "$SCRIPTS/maps.sh" "$@"
+                ;;
+
+            *)
+                echo
+                echo "Maps commands:"
+                echo "  ./nomad maps start"
+                echo "  ./nomad maps stop"
+                echo "  ./nomad maps restart"
+                echo "  ./nomad maps status"
+                echo "  ./nomad maps open"
+                echo "  ./nomad maps logs"
+                echo "  ./nomad maps list"
+                echo "  ./nomad maps info state"
+                echo "  ./nomad maps validate"
+                echo
+                ;;
+        esac
         ;;
 
     dashboard)

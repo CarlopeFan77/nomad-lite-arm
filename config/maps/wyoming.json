@@ -1,0 +1,112 @@
+{
+    "schema_version": 1,
+
+    "id": "wyoming",
+    "name": "Wyoming",
+    "state_code": "WY",
+    "country": "US",
+
+    "center": [
+        -107.49945,
+        42.997775
+    ],
+
+    "zoom": 6.5,
+
+    "bounds": [
+        -111.0576,
+        40.98339,
+        -103.9413,
+        45.01216
+    ],
+
+    "max_bounds": [
+        -112.0,
+        40.2,
+        -103.0,
+        45.8
+    ],
+
+    "packages": {
+        "basic": {
+            "file": "data/maps/wyoming/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 117.2,
+
+            "download": {
+                "sha256": "fe77fb0c5cd22682171b5fa6cc80f424b812dbf5c194471e396a8bd69cc5fad1",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-wyoming-v1/basic.mbtiles",
+                        "sha256": "fe77fb0c5cd22682171b5fa6cc80f424b812dbf5c194471e396a8bd69cc5fad1"
+                    }
+                ]
+            }
+        },
+
+        "terrain": {
+            "file": "data/maps/wyoming/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 759.0,
+
+            "download": {
+                "sha256": "6aeb5c85e12e54dcf51b4b91cc9de611ee1f7d709fdeeea5ac02b2d0dc574dfc",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-wyoming-v1/terrain.mbtiles",
+                        "sha256": "6aeb5c85e12e54dcf51b4b91cc9de611ee1f7d709fdeeea5ac02b2d0dc574dfc"
+                    }
+                ]
+            }
+        },
+
+        "contours": {
+            "file": "data/maps/wyoming/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 160.0,
+
+            "download": {
+                "sha256": "f328ae03095a6b8f00413d37a179a73cb3b41cf5a84ac7ac5216ac700cc69a1d",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-wyoming-v1/contours.mbtiles",
+                        "sha256": "f328ae03095a6b8f00413d37a179a73cb3b41cf5a84ac7ac5216ac700cc69a1d"
+                    }
+                ]
+            }
+        }
+    },
+
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 1 GiB for Wyoming and may take several minutes to download and install on lightweight hardware."
+        }
+    },
+
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}

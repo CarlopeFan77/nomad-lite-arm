@@ -1,6 +1,7 @@
 # Downloaded/offline content
 data/*
 !data/.gitkeep
+data/
 
 # Kiwix files
 *.zim
@@ -16,6 +17,9 @@ data/*
 __pycache__/
 *.pyc
 .venv/
+
+# Runtime files
+.run/
 
 # Temporary files
 *.tmp

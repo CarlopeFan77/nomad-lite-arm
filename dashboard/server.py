@@ -297,6 +297,26 @@ class NomadHandler(SimpleHTTPRequestHandler):
             self.send_json(result)
             return
 
+        if self.path == "/api/maps/status":
+            result = run_nomad(
+                "maps",
+                "status",
+            )
+
+            output = result["output"].lower()
+
+            result["running"] = (
+                "maps: running" in output
+                and "maps: stopped" not in output
+            )
+
+            result["url"] = (
+                "http://localhost:8083/map"
+            )
+
+            self.send_json(result)
+            return
+
         if self.path == "/api/system":
             self.send_json(
                 run_nomad("system")
@@ -354,6 +374,24 @@ class NomadHandler(SimpleHTTPRequestHandler):
             self.send_json(
                 run_nomad(
                     "education",
+                    "stop",
+                )
+            )
+            return
+
+        if self.path == "/api/maps/start":
+            self.send_json(
+                run_nomad(
+                    "maps",
+                    "start",
+                )
+            )
+            return
+
+        if self.path == "/api/maps/stop":
+            self.send_json(
+                run_nomad(
+                    "maps",
                     "stop",
                 )
             )
