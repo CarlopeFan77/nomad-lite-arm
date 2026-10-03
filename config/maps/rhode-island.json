@@ -1,79 +1,79 @@
 {
     "schema_version": 1,
 
-    "id": "wyoming",
-    "name": "Wyoming",
-    "state_code": "WY",
+    "id": "rhode-island",
+    "name": "Rhode Island",
+    "state_code": "RI",
     "country": "US",
 
     "center": [
-        -107.49945,
-        42.997775
+        -71.489125,
+        41.50929
     ],
 
-    "zoom": 6.5,
+    "zoom": 7.0,
 
     "bounds": [
-        -111.0576,
-        40.98339,
-        -103.9413,
-        45.01216
+        -71.91456,
+        40.9992,
+        -71.06369,
+        42.01938
     ],
 
     "max_bounds": [
-        -112.0,
-        40.2,
-        -103.0,
-        45.8
+        -72.2,
+        40.7,
+        -70.8,
+        42.3
     ],
 
     "packages": {
         "basic": {
-            "file": "data/maps/wyoming/basic.mbtiles",
+            "file": "data/maps/rhode-island/basic.mbtiles",
             "minzoom": 0,
             "maxzoom": 14,
-            "approx_size_mib": 117.2,
+            "approx_size_mib": 43.4,
 
             "download": {
-                "sha256": "fe77fb0c5cd22682171b5fa6cc80f424b812dbf5c194471e396a8bd69cc5fad1",
+                "sha256": "47e4dc89b2e3faeb5bbc64721b6bab2a4271f9c471bb69814a128d87913b19ec",
                 "parts": [
                     {
-                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-wyoming-v1/basic.mbtiles",
-                        "sha256": "fe77fb0c5cd22682171b5fa6cc80f424b812dbf5c194471e396a8bd69cc5fad1"
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-rhode-island-v1/basic.mbtiles",
+                        "sha256": "47e4dc89b2e3faeb5bbc64721b6bab2a4271f9c471bb69814a128d87913b19ec"
                     }
                 ]
             }
         },
 
         "terrain": {
-            "file": "data/maps/wyoming/terrain.mbtiles",
+            "file": "data/maps/rhode-island/terrain.mbtiles",
             "minzoom": 0,
             "maxzoom": 12,
-            "approx_size_mib": 759.0,
+            "approx_size_mib": 15.8,
 
             "download": {
-                "sha256": "6aeb5c85e12e54dcf51b4b91cc9de611ee1f7d709fdeeea5ac02b2d0dc574dfc",
+                "sha256": "c1797fe9ab94737b2eacd996eeac665e98b1444e936f308262661815b517d9d2",
                 "parts": [
                     {
-                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-wyoming-v1/terrain.mbtiles",
-                        "sha256": "6aeb5c85e12e54dcf51b4b91cc9de611ee1f7d709fdeeea5ac02b2d0dc574dfc"
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-rhode-island-v1/terrain.mbtiles",
+                        "sha256": "c1797fe9ab94737b2eacd996eeac665e98b1444e936f308262661815b517d9d2"
                     }
                 ]
             }
         },
 
         "contours": {
-            "file": "data/maps/wyoming/contours.mbtiles",
+            "file": "data/maps/rhode-island/contours.mbtiles",
             "minzoom": 10,
             "maxzoom": 13,
-            "approx_size_mib": 160.0,
+            "approx_size_mib": 3.3,
 
             "download": {
-                "sha256": "f328ae03095a6b8f00413d37a179a73cb3b41cf5a84ac7ac5216ac700cc69a1d",
+                "sha256": "f88eb78499e7e2dd7fb677b8e0d9b7ca04fd15f282f5597afc7e23e4ecfffa5f",
                 "parts": [
                     {
-                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-wyoming-v1/contours.mbtiles",
-                        "sha256": "f328ae03095a6b8f00413d37a179a73cb3b41cf5a84ac7ac5216ac700cc69a1d"
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-rhode-island-v1/contours.mbtiles",
+                        "sha256": "f88eb78499e7e2dd7fb677b8e0d9b7ca04fd15f282f5597afc7e23e4ecfffa5f"
                     }
                 ]
             }
@@ -98,7 +98,7 @@
                 "terrain",
                 "contours"
             ],
-            "install_note": "Large map package. Around 1 GiB for Wyoming and may take several minutes to download and install on lightweight hardware."
+            "install_note": "Around 63 MiB for Rhode Island. Includes offline terrain and 40 ft / 200 ft elevation contours."
         }
     },
 

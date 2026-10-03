@@ -34,14 +34,14 @@ show_help() {
     echo "  education stop            Stop Kolibri"
     echo "  education status          Show Kolibri status"
     echo
-    echo "  maps start                Start offline Maps"
+    echo "  maps start [STATE]        Start Maps for a state"
     echo "  maps stop                 Stop offline Maps"
     echo "  maps restart              Restart offline Maps"
     echo "  maps status               Show Maps status"
     echo "  maps open                 Open Maps in browser"
     echo "  maps logs                 Show recent Maps logs"
     echo "  maps list                 Show configured map states"
-    echo "  maps info STATE           Show installed map packages"
+    echo "  maps info [STATE]         Show installed map packages"
     echo "  maps validate             Validate map configuration"
     echo
     echo "  system                    Show system information"
@@ -49,12 +49,290 @@ show_help() {
     echo
     echo "  library list              Show available content"
     echo "  library installed         Show installed content"
-    echo "  library info NAME         Show collection information"
-    echo "  library install NAME      Install a collection"
-    echo "  library remove NAME       Remove a collection"
+    echo "  library info [NAME]       Show collection information"
+    echo "  library install [NAME]    Install a collection"
+    echo "  library remove [NAME]     Remove a collection"
     echo
     echo "  help                      Show this help"
     echo
+}
+
+installed_map_states() {
+    "$PYTHON" - "$PROJECT_DIR" <<'PY'
+import json
+import sys
+
+from pathlib import Path
+
+
+project_dir = Path(sys.argv[1])
+
+config_dir = (
+    project_dir
+    / "config"
+    / "maps"
+)
+
+
+for config_file in sorted(
+    config_dir.glob("*.json")
+):
+
+    try:
+        state = json.loads(
+            config_file.read_text(
+                encoding="utf-8"
+            )
+        )
+
+    except (
+        json.JSONDecodeError,
+        OSError,
+    ):
+        continue
+
+    state_id = state.get(
+        "id",
+        config_file.stem,
+    )
+
+    state_name = state.get(
+        "name",
+        state_id,
+    )
+
+    basic = (
+        state
+        .get("packages", {})
+        .get("basic", {})
+    )
+
+    relative_path = basic.get(
+        "file"
+    )
+
+    if not relative_path:
+        continue
+
+    basic_file = (
+        project_dir
+        / relative_path
+    )
+
+    if basic_file.is_file():
+        print(
+            f"{state_id}\t{state_name}"
+        )
+PY
+}
+
+
+validate_map_state() {
+    local state_id="$1"
+
+    "$PYTHON" - \
+        "$PROJECT_DIR" \
+        "$state_id" <<'PY'
+import json
+import sys
+
+from pathlib import Path
+
+
+project_dir = Path(sys.argv[1])
+
+state_id = (
+    sys.argv[2]
+    .strip()
+    .lower()
+)
+
+config_file = (
+    project_dir
+    / "config"
+    / "maps"
+    / f"{state_id}.json"
+)
+
+
+if not config_file.is_file():
+
+    print(
+        f"Unknown map state: {state_id}"
+    )
+
+    raise SystemExit(1)
+
+
+try:
+
+    state = json.loads(
+        config_file.read_text(
+            encoding="utf-8"
+        )
+    )
+
+except json.JSONDecodeError:
+
+    print(
+        f"Invalid map configuration: "
+        f"{config_file}"
+    )
+
+    raise SystemExit(1)
+
+
+basic = (
+    state
+    .get("packages", {})
+    .get("basic", {})
+)
+
+relative_path = basic.get(
+    "file"
+)
+
+
+if not relative_path:
+
+    print(
+        f"{state.get('name', state_id)} "
+        "does not define a Basic map."
+    )
+
+    raise SystemExit(1)
+
+
+basic_file = (
+    project_dir
+    / relative_path
+)
+
+
+if not basic_file.is_file():
+
+    print(
+        f"{state.get('name', state_id)} "
+        "is configured but not installed."
+    )
+
+    raise SystemExit(1)
+
+
+print(
+    state.get(
+        "name",
+        state_id,
+    )
+)
+PY
+}
+
+
+start_maps() {
+    local requested_state="${1:-}"
+    local state_id
+    local state_name
+    local selection
+    local entry
+    local index
+    local -a states=()
+
+    if [[ -n "$requested_state" ]]; then
+
+        state_id="$(
+            printf '%s' "$requested_state" \
+                | tr '[:upper:]' '[:lower:]'
+        )"
+
+        if ! state_name="$(
+            validate_map_state "$state_id"
+        )"; then
+            return 1
+        fi
+
+    else
+
+        mapfile -t states < <(
+            installed_map_states
+        )
+
+        if [[ ${#states[@]} -eq 0 ]]; then
+            echo
+            echo "No offline map states are installed."
+            echo
+            echo "Install a map before starting Maps."
+            return 1
+        fi
+
+        if [[ ${#states[@]} -eq 1 ]]; then
+
+            entry="${states[0]}"
+            state_id="${entry%%$'\t'*}"
+            state_name="${entry#*$'\t'}"
+
+        else
+
+            echo
+            echo "NOMAD Maps"
+            echo "================================"
+            echo
+            echo "Installed map states:"
+            echo
+
+            index=1
+
+            for entry in "${states[@]}"; do
+                state_name="${entry#*$'\t'}"
+
+                printf \
+                    "  %d) %s\n" \
+                    "$index" \
+                    "$state_name"
+
+                ((index += 1))
+            done
+
+            echo
+
+            read -r -p \
+                "Choose a state [1-${#states[@]}]: " \
+                selection
+
+            if ! [[ "$selection" =~ ^[0-9]+$ ]]; then
+                echo
+                echo "Invalid selection."
+                return 1
+            fi
+
+            if (( selection < 1 || selection > ${#states[@]} )); then
+                echo
+                echo "Invalid selection."
+                return 1
+            fi
+
+            entry="${states[selection - 1]}"
+            state_id="${entry%%$'\t'*}"
+            state_name="${entry#*$'\t'}"
+        fi
+    fi
+
+    echo
+    echo "Starting NOMAD Maps"
+    echo "State: $state_name"
+    echo
+
+    "$SCRIPTS/maps.sh" stop \
+        >/dev/null 2>&1 \
+        || true
+
+    NOMAD_MAPS_STATE="$state_id" \
+        "$SCRIPTS/maps.sh" start
+
+    mkdir -p "$PROJECT_DIR/.run"
+
+    printf '%s\n' "$state_id" \
+        > "$PROJECT_DIR/.run/maps.state"
 }
 
 
@@ -143,14 +421,19 @@ case "${1:-help}" in
 
         case "${1:-}" in
 
-            start|stop|restart|status|open|logs|list|info|validate)
+            start)
+                shift
+                start_maps "${1:-}"
+                ;;
+
+            stop|restart|status|open|logs|list|info|validate)
                 "$SCRIPTS/maps.sh" "$@"
                 ;;
 
             *)
                 echo
                 echo "Maps commands:"
-                echo "  ./nomad maps start"
+                echo "  ./nomad maps start [state]"
                 echo "  ./nomad maps stop"
                 echo "  ./nomad maps restart"
                 echo "  ./nomad maps status"

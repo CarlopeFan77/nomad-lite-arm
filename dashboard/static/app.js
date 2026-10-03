@@ -87,6 +87,7 @@ async function loadEducationStatus() {
 
 
 async function loadMapsStatus() {
+
     const response = await fetch(
         "/api/maps/status"
     );
@@ -98,11 +99,6 @@ async function loadMapsStatus() {
             "maps-status"
         );
 
-    const openButton =
-        document.getElementById(
-            "open-maps-button"
-        );
-
 
     if (data.url) {
         mapsUrl = data.url;
@@ -111,14 +107,19 @@ async function loadMapsStatus() {
 
     if (data.running) {
 
-        status.textContent =
-            "Running";
+        if (data.state_name) {
+
+            status.textContent =
+                `Running — ${data.state_name}`;
+
+        } else {
+
+            status.textContent =
+                "Running";
+        }
 
         status.className =
             "service-status installed";
-
-        openButton.disabled =
-            false;
 
     } else {
 
@@ -127,23 +128,321 @@ async function loadMapsStatus() {
 
         status.className =
             "service-status available";
-
-        openButton.disabled =
-            true;
     }
 }
 
 
-async function startMaps() {
+async function loadMapStates() {
 
-    await fetch(
-        "/api/maps/start",
+    const response = await fetch(
+        "/api/maps/states"
+    );
+
+    const data = await response.json();
+
+    const container =
+        document.getElementById(
+            "maps-states"
+        );
+
+
+    const previousSelect =
+        document.getElementById(
+            "map-state-select"
+        );
+
+    const previousSelection =
+        previousSelect
+            ? previousSelect.value
+            : null;
+
+
+    container.replaceChildren();
+
+
+    const states = (
+        data.states || []
+    ).sort(
+        (a, b) =>
+            a.name.localeCompare(
+                b.name
+            )
+    );
+
+
+    if (states.length === 0) {
+
+        const message =
+            document.createElement(
+                "p"
+            );
+
+        message.textContent =
+            "No offline maps installed.";
+
+        container.appendChild(
+            message
+        );
+
+        return;
+    }
+
+
+    const count =
+        document.createElement(
+            "div"
+        );
+
+    count.className =
+        "map-state-count";
+
+    count.textContent =
+        states.length === 1
+            ? "1 state installed"
+            : `${states.length} states installed`;
+
+    container.appendChild(
+        count
+    );
+
+
+    /*
+     * With three or fewer states,
+     * show each one directly.
+     */
+    if (states.length <= 3) {
+
+        for (const state of states) {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "map-state-row";
+
+
+            const info =
+                document.createElement(
+                    "div"
+                );
+
+
+            const name =
+                document.createElement(
+                    "strong"
+                );
+
+            name.textContent =
+                state.name;
+
+
+            const profile =
+                document.createElement(
+                    "span"
+                );
+
+            profile.className =
+                "map-state-profile";
+
+            profile.textContent =
+                `${state.profile} installed`;
+
+
+            info.appendChild(
+                name
+            );
+
+            info.appendChild(
+                profile
+            );
+
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.textContent =
+                "Open";
+
+            button.addEventListener(
+                "click",
+                () => {
+                    openStateMap(
+                        state.id
+                    );
+                }
+            );
+
+
+            row.appendChild(
+                info
+            );
+
+            row.appendChild(
+                button
+            );
+
+            container.appendChild(
+                row
+            );
+        }
+
+        return;
+    }
+
+
+    /*
+     * Four or more states:
+     * switch to a compact selector.
+     */
+
+    const controls =
+        document.createElement(
+            "div"
+        );
+
+    controls.className =
+        "map-state-controls";
+
+
+    const select =
+        document.createElement(
+            "select"
+        );
+
+    select.id =
+        "map-state-select";
+
+    select.className =
+        "map-state-select";
+
+
+    for (const state of states) {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            state.id;
+
+        option.textContent =
+            `${state.name} — ${state.profile}`;
+
+        select.appendChild(
+            option
+        );
+    }
+
+
+    if (
+        previousSelection
+        && states.some(
+            state =>
+                state.id
+                === previousSelection
+        )
+    ) {
+
+        select.value =
+            previousSelection;
+    }
+
+
+    const button =
+        document.createElement(
+            "button"
+        );
+
+    button.textContent =
+        "Open Map";
+
+    button.addEventListener(
+        "click",
+        () => {
+            openStateMap(
+                select.value
+            );
+        }
+    );
+
+
+    controls.appendChild(
+        select
+    );
+
+    controls.appendChild(
+        button
+    );
+
+    container.appendChild(
+        controls
+    );
+}
+
+
+async function openStateMap(
+    stateId
+) {
+
+    /*
+     * Open a blank tab immediately so the
+     * browser treats this as a user click
+     * rather than blocking it as a popup.
+     */
+    const mapWindow =
+        window.open(
+            "about:blank",
+            "_blank"
+        );
+
+
+    const response = await fetch(
+        "/api/maps/start/"
+        + encodeURIComponent(
+            stateId
+        ),
         {
             method: "POST"
         }
     );
 
+    const data =
+        await response.json();
+
+
+    if (data.success === false) {
+
+        if (mapWindow) {
+            mapWindow.close();
+        }
+
+        alert(
+            data.output
+            || "Could not start Maps."
+        );
+
+        return;
+    }
+
+
     await loadMapsStatus();
+
+
+    if (mapWindow) {
+
+        mapWindow.location.href =
+            mapsUrl;
+
+    } else {
+
+        window.location.href =
+            mapsUrl;
+    }
 }
 
 
@@ -158,16 +457,6 @@ async function stopMaps() {
 
     await loadMapsStatus();
 }
-
-
-function openMaps() {
-
-    window.open(
-        mapsUrl,
-        "_blank"
-    );
-}
-
 
 
 async function loadSystem() {
@@ -702,6 +991,7 @@ async function initialize() {
         loadKiwixStatus(),
         loadEducationStatus(),
         loadMapsStatus(),
+        loadMapStates(),
         loadEducation(),
         loadLibrary(),
         loadSystem(),
@@ -719,3 +1009,7 @@ setInterval(() => {
     loadEducation();
     loadLibrary();
 }, 5000);
+
+setInterval(() => {
+    loadMapStates();
+}, 30000);

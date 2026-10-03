@@ -314,7 +314,171 @@ class NomadHandler(SimpleHTTPRequestHandler):
                 "http://localhost:8083/map"
             )
 
+            result["state_id"] = None
+            result["state_name"] = None
+
+            state_file = (
+                PROJECT_DIR
+                / ".run"
+                / "maps.state"
+            )
+
+            if (
+                result["running"]
+                and state_file.is_file()
+            ):
+
+                try:
+
+                    state_id = (
+                        state_file
+                        .read_text(
+                            encoding="utf-8"
+                        )
+                        .strip()
+                        .lower()
+                    )
+
+                    config_file = (
+                        PROJECT_DIR
+                        / "config"
+                        / "maps"
+                        / f"{state_id}.json"
+                    )
+
+                    state_name = state_id
+
+                    if config_file.is_file():
+
+                        config = json.loads(
+                            config_file.read_text(
+                                encoding="utf-8"
+                            )
+                        )
+
+                        state_name = config.get(
+                            "name",
+                            state_id,
+                        )
+
+                    result["state_id"] = (
+                        state_id
+                    )
+
+                    result["state_name"] = (
+                        state_name
+                    )
+
+                except (
+                    OSError,
+                    json.JSONDecodeError,
+                ):
+                    pass
+
             self.send_json(result)
+            return
+
+        if self.path == "/api/maps/states":
+
+            states = []
+
+            config_dir = (
+                PROJECT_DIR
+                / "config"
+                / "maps"
+            )
+
+            for config_file in sorted(
+                config_dir.glob("*.json")
+            ):
+
+                try:
+
+                    state = json.loads(
+                        config_file.read_text(
+                            encoding="utf-8"
+                        )
+                    )
+
+                except (
+                    OSError,
+                    json.JSONDecodeError,
+                ):
+                    continue
+
+                state_id = state.get(
+                    "id",
+                    config_file.stem,
+                )
+
+                state_name = state.get(
+                    "name",
+                    state_id,
+                )
+
+                packages = state.get(
+                    "packages",
+                    {},
+                )
+
+                def installed(
+                    package_name,
+                ):
+
+                    package = packages.get(
+                        package_name,
+                        {},
+                    )
+
+                    relative_path = (
+                        package.get("file")
+                    )
+
+                    if not relative_path:
+                        return False
+
+                    return (
+                        PROJECT_DIR
+                        / relative_path
+                    ).is_file()
+
+                basic_installed = installed(
+                    "basic"
+                )
+
+                terrain_installed = installed(
+                    "terrain"
+                )
+
+                contours_installed = installed(
+                    "contours"
+                )
+
+                if not basic_installed:
+                    continue
+
+                if (
+                    terrain_installed
+                    and contours_installed
+                ):
+                    profile = "Topo"
+
+                else:
+                    profile = "Basic"
+
+                states.append(
+                    {
+                        "id": state_id,
+                        "name": state_name,
+                        "profile": profile,
+                    }
+                )
+
+            self.send_json(
+                {
+                    "states": states
+                }
+            )
             return
 
         if self.path == "/api/system":
@@ -379,11 +543,20 @@ class NomadHandler(SimpleHTTPRequestHandler):
             )
             return
 
-        if self.path == "/api/maps/start":
+        if self.path.startswith(
+            "/api/maps/start/"
+        ):
+
+            state_id = self.path.rsplit(
+                "/",
+                1,
+            )[-1]
+
             self.send_json(
                 run_nomad(
                     "maps",
                     "start",
+                    state_id,
                 )
             )
             return
