@@ -19,6 +19,11 @@ CONFIG_DIR = (
     / "maps"
 )
 
+WIP_CONFIG_DIR = (
+    CONFIG_DIR
+    / "wip"
+)
+
 RUN_DIR = (
     PROJECT_DIR
     / ".run"
@@ -34,10 +39,25 @@ def load_state(state_id):
 
     if not config_file.is_file():
 
-        raise SystemExit(
-            "State configuration not found: "
-            f"{config_file}"
+        wip_config_file = (
+            WIP_CONFIG_DIR
+            / f"{state_id}.json"
         )
+
+        if wip_config_file.is_file():
+
+            config_file = (
+                wip_config_file
+            )
+
+        else:
+
+            raise SystemExit(
+                "State configuration not found "
+                "in active or WIP maps:\n"
+                f"  {config_file}\n"
+                f"  {wip_config_file}"
+            )
 
     try:
 
