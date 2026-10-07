@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "colorado",
+    "name": "Colorado",
+    "state_code": "CO",
+    "country": "US",
+    "center": [
+        -105.5493,
+        38.996655
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -109.0631,
+        36.98943,
+        -102.0355,
+        41.00388
+    ],
+    "max_bounds": [
+        -109.625308,
+        36.668274,
+        -101.473292,
+        41.325036
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/colorado/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 280.07,
+            "download": {
+                "sha256": "8b200aacd3f50321fde2e58ecd55539e9ea788938fb2a90ac1763b2add7c1773",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-colorado-v1/basic.mbtiles",
+                        "sha256": "8b200aacd3f50321fde2e58ecd55539e9ea788938fb2a90ac1763b2add7c1773"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/colorado/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 710.5,
+            "download": {
+                "sha256": "98cfd6b23178ff339fd17c649631bc89eff2f2ad2ac926328155e89bf1a6fdec",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-colorado-v1/terrain.mbtiles",
+                        "sha256": "98cfd6b23178ff339fd17c649631bc89eff2f2ad2ac926328155e89bf1a6fdec"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/colorado/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 381.94,
+            "download": {
+                "sha256": "fe76508e84dc5a8e1e20f2aac39886d7441bbc47fafa5ee8592a3b16410b5104",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-colorado-v1/contours.mbtiles",
+                        "sha256": "fe76508e84dc5a8e1e20f2aac39886d7441bbc47fafa5ee8592a3b16410b5104"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 1.34 GiB for Colorado and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}
