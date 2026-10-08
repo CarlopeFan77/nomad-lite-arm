@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "new-hampshire",
+    "name": "New Hampshire",
+    "state_code": "NH",
+    "country": "US",
+    "center": [
+        -71.52286,
+        44.003355
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -72.5588,
+        42.69669,
+        -70.48692,
+        45.31002
+    ],
+    "max_bounds": [
+        -72.8088,
+        42.44669,
+        -70.23692,
+        45.56002
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/new-hampshire/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 98.43,
+            "download": {
+                "sha256": "8c0cf2b06ebef8c8b7dccb217dc572c4bc567aaa40e44b7292ff5c48f2a02ff4",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-new-hampshire-v1/basic.mbtiles",
+                        "sha256": "8c0cf2b06ebef8c8b7dccb217dc572c4bc567aaa40e44b7292ff5c48f2a02ff4"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/new-hampshire/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 152.17,
+            "download": {
+                "sha256": "e74a110f8a905a53d8d56bf76e09eff34d35677225e6fdc61553002a000eab40",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-new-hampshire-v1/terrain.mbtiles",
+                        "sha256": "e74a110f8a905a53d8d56bf76e09eff34d35677225e6fdc61553002a000eab40"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/new-hampshire/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 61.29,
+            "download": {
+                "sha256": "fe09633099084a472ef281a71209ecb865385c6cca957f85104e823e73e960a7",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-new-hampshire-v1/contours.mbtiles",
+                        "sha256": "fe09633099084a472ef281a71209ecb865385c6cca957f85104e823e73e960a7"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 312 MiB for New Hampshire and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}
