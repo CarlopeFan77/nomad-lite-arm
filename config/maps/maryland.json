@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "maryland",
+    "name": "Maryland",
+    "state_code": "MD",
+    "country": "US",
+    "center": [
+        -77.221325,
+        38.8054
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -79.48857,
+        37.88396,
+        -74.95408,
+        39.72684
+    ],
+    "max_bounds": [
+        -79.851329,
+        37.63396,
+        -74.591321,
+        39.97684
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/maryland/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 264.8,
+            "download": {
+                "sha256": "9f87392617d115ed09a32ab1b7685549c31aa9924e19691d2f3587e6c638ad57",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-maryland-v1/basic.mbtiles",
+                        "sha256": "9f87392617d115ed09a32ab1b7685549c31aa9924e19691d2f3587e6c638ad57"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/maryland/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 194.61,
+            "download": {
+                "sha256": "1ac79fc1c4ce6977cb180a212484f7061622a8947878cbcda7ca5da94a2d9fbb",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-maryland-v1/terrain.mbtiles",
+                        "sha256": "1ac79fc1c4ce6977cb180a212484f7061622a8947878cbcda7ca5da94a2d9fbb"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/maryland/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 80.22,
+            "download": {
+                "sha256": "70a10d4b0ed37c6072ab67cbb48d3fc7e3b2309a9a0b554cee3fce928e06ef37",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-maryland-v1/contours.mbtiles",
+                        "sha256": "70a10d4b0ed37c6072ab67cbb48d3fc7e3b2309a9a0b554cee3fce928e06ef37"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 540 MiB for Maryland and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}

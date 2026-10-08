@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "pennsylvania",
+    "name": "Pennsylvania",
+    "state_code": "PA",
+    "country": "US",
+    "center": [
+        -77.60518,
+        41.090445
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -80.52275,
+        39.6644,
+        -74.68761,
+        42.51649
+    ],
+    "max_bounds": [
+        -80.989561,
+        39.4144,
+        -74.220799,
+        42.76649
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/pennsylvania/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 340.84,
+            "download": {
+                "sha256": "ff81a37318e6d256fbfb2ea273b4570fb79c9d27f1741f0b083024b172eeb567",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-pennsylvania-v1/basic.mbtiles",
+                        "sha256": "ff81a37318e6d256fbfb2ea273b4570fb79c9d27f1741f0b083024b172eeb567"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/pennsylvania/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 443.8,
+            "download": {
+                "sha256": "5cbb85f653aa02b2cced3d19acfa095d6be2d308049a43c06e1770aab99838e0",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-pennsylvania-v1/terrain.mbtiles",
+                        "sha256": "5cbb85f653aa02b2cced3d19acfa095d6be2d308049a43c06e1770aab99838e0"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/pennsylvania/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 182.23,
+            "download": {
+                "sha256": "452743ae3104a30d4ed3af97c1b5d15a8bc2eb74b66d5a2edf58bdb2d9328f2b",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-pennsylvania-v1/contours.mbtiles",
+                        "sha256": "452743ae3104a30d4ed3af97c1b5d15a8bc2eb74b66d5a2edf58bdb2d9328f2b"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 967 MiB for Pennsylvania and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}
