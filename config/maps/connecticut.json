@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "connecticut",
+    "name": "Connecticut",
+    "state_code": "CT",
+    "country": "US",
+    "center": [
+        -72.757095,
+        41.50815
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -73.72889,
+        40.96401,
+        -71.7853,
+        42.05229
+    ],
+    "max_bounds": [
+        -73.97889,
+        40.71401,
+        -71.5353,
+        42.30229
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/connecticut/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 108.36,
+            "download": {
+                "sha256": "263c3f0f5f491da4f23abdbeac960c5e7d9288a278e71abdee18214928016a42",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-connecticut-v1/basic.mbtiles",
+                        "sha256": "263c3f0f5f491da4f23abdbeac960c5e7d9288a278e71abdee18214928016a42"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/connecticut/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 53.23,
+            "download": {
+                "sha256": "7e89ac3f91a1d9fcb5703e55730c23c80a39437fdcfe5c08b86ba7c65e437ca4",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-connecticut-v1/terrain.mbtiles",
+                        "sha256": "7e89ac3f91a1d9fcb5703e55730c23c80a39437fdcfe5c08b86ba7c65e437ca4"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/connecticut/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 16.99,
+            "download": {
+                "sha256": "f96485f83401daab4b582a22d5caf79b1ae47cf7dd354aa4c5fb84d3d538f8e3",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-connecticut-v1/contours.mbtiles",
+                        "sha256": "f96485f83401daab4b582a22d5caf79b1ae47cf7dd354aa4c5fb84d3d538f8e3"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 179 MiB for Connecticut and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}
