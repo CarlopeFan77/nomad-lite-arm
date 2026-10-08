@@ -29,6 +29,46 @@ default in:
 - Tippecanoe
 - tile-join
 
+
+## One-Command State Pipeline
+
+Once the development environment is configured, a new
+state can be prepared, built, and released with one
+command:
+
+    python3 tools/state-builder/state-pipeline.py \
+        new-hampshire \
+        --state-code NH
+
+The pipeline runs:
+
+    prepare-state.py
+    → build-state.py
+    → release-state.py
+
+The GitHub release step still asks for confirmation
+before publication.
+
+For unattended operation after reviewing the workflow:
+
+    python3 tools/state-builder/state-pipeline.py \
+        new-hampshire \
+        --state-code NH \
+        --yes
+
+To remove local build files after a successful release:
+
+    python3 tools/state-builder/state-pipeline.py \
+        new-hampshire \
+        --state-code NH \
+        --yes \
+        --clean
+
+The pipeline is resumable. Existing WIP configurations,
+completed builds, and draft releases are reused rather
+than starting over.
+
+
 ## Usage
 
 From the repository root:
