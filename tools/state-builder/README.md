@@ -75,3 +75,46 @@ After reviewing the configuration, build the state:
 Once the packages have been released and verified,
 the state configuration can be moved from `wip/`
 into the active `config/maps/` catalog.
+
+## Publishing a State
+
+After a state has been built and reviewed, publish it
+with:
+
+    python3 tools/state-builder/release-state.py maine
+
+The release tool:
+
+1. Verifies local package sizes and SHA-256 hashes.
+2. Creates a draft GitHub Release.
+3. Uploads Basic, terrain, and contour MBTiles.
+4. Verifies the uploaded release assets.
+5. Adds release URLs, hashes, and exact package sizes
+   to the state configuration.
+6. Publishes the GitHub Release.
+7. Moves the state from `config/maps/wip/` into the
+   active `config/maps/` catalog.
+
+To skip the confirmation prompt:
+
+    python3 tools/state-builder/release-state.py \
+        maine \
+        --yes
+
+To delete the local build after a successful release:
+
+    python3 tools/state-builder/release-state.py \
+        maine \
+        --yes \
+        --clean
+
+Existing releases can be checked without changing
+anything:
+
+    python3 tools/state-builder/release-state.py \
+        maine \
+        --verify-only
+
+The tool intentionally does not create Git commits or
+push repository changes. Review the generated state
+configuration before committing it.
