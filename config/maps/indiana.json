@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "indiana",
+    "name": "Indiana",
+    "state_code": "IN",
+    "country": "US",
+    "center": [
+        -86.441845,
+        39.76606
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -88.10327,
+        37.76911,
+        -84.78042,
+        41.76301
+    ],
+    "max_bounds": [
+        -88.369098,
+        37.449598,
+        -84.514592,
+        42.082522
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/indiana/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 234.74,
+            "download": {
+                "sha256": "be75cafe239047eb39c76e2ba3b04c345cd2aa7d1ad29ceb51d3a1a90b50e1ad",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-indiana-v1/basic.mbtiles",
+                        "sha256": "be75cafe239047eb39c76e2ba3b04c345cd2aa7d1ad29ceb51d3a1a90b50e1ad"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/indiana/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 301.3,
+            "download": {
+                "sha256": "7dab66f51dfe8202c34fbbf40db18c9c490d29ba4824d27f5f7c02ab9c684e31",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-indiana-v1/terrain.mbtiles",
+                        "sha256": "7dab66f51dfe8202c34fbbf40db18c9c490d29ba4824d27f5f7c02ab9c684e31"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/indiana/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 68.46,
+            "download": {
+                "sha256": "e62b4aa6e726a0632a4fe23f8ca457bce35eb828f4fa0fec78275ddb5694ed9e",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-indiana-v1/contours.mbtiles",
+                        "sha256": "e62b4aa6e726a0632a4fe23f8ca457bce35eb828f4fa0fec78275ddb5694ed9e"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 604 MiB for Indiana and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}

@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "virginia",
+    "name": "Virginia",
+    "state_code": "VA",
+    "country": "US",
+    "center": [
+        -78.98796,
+        38.003495
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -83.67841,
+        36.53798,
+        -74.29751,
+        39.46901
+    ],
+    "max_bounds": [
+        -84.428882,
+        36.28798,
+        -73.547038,
+        39.71901
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/virginia/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 539.61,
+            "download": {
+                "sha256": "44a07a735a2ca5f16942b6ffe00a6ddbb8ad3750d089e9852eb8b586a29da60f",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-virginia-v1/basic.mbtiles",
+                        "sha256": "44a07a735a2ca5f16942b6ffe00a6ddbb8ad3750d089e9852eb8b586a29da60f"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/virginia/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 630.38,
+            "download": {
+                "sha256": "3cb14e6f4920ca71d30fbe867beed08b32ff226d49638aa44338fd2cedaea9c5",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-virginia-v1/terrain.mbtiles",
+                        "sha256": "3cb14e6f4920ca71d30fbe867beed08b32ff226d49638aa44338fd2cedaea9c5"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/virginia/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 441.15,
+            "download": {
+                "sha256": "071a50d78522c14ecce32e217824962a46dbeb9c690d263d254b39129f222833",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-virginia-v1/contours.mbtiles",
+                        "sha256": "071a50d78522c14ecce32e217824962a46dbeb9c690d263d254b39129f222833"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 1.57 GiB for Virginia and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}

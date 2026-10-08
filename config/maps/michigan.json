@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "michigan",
+    "name": "Michigan",
+    "state_code": "MI",
+    "country": "US",
+    "center": [
+        -86.24447,
+        45.0223
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -90.41981,
+        41.69439,
+        -82.06913,
+        48.35021
+    ],
+    "max_bounds": [
+        -91.087864,
+        41.161924,
+        -81.401076,
+        48.882676
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/michigan/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 636.17,
+            "download": {
+                "sha256": "22f748a23bcce3d4f1c01ffeacd78e9675e88896d8994a5eefa677a794140fc2",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-michigan-v1/basic.mbtiles",
+                        "sha256": "22f748a23bcce3d4f1c01ffeacd78e9675e88896d8994a5eefa677a794140fc2"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/michigan/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 787.86,
+            "download": {
+                "sha256": "1685d8f6f73b2a6893a1594bfe4345fa18b5767948a958f60ec92cbdf0625253",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-michigan-v1/terrain.mbtiles",
+                        "sha256": "1685d8f6f73b2a6893a1594bfe4345fa18b5767948a958f60ec92cbdf0625253"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/michigan/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 184.93,
+            "download": {
+                "sha256": "e00b931e0c45cfd5ffe8391834888aec0615bab34e3647762335154259f35797",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-michigan-v1/contours.mbtiles",
+                        "sha256": "e00b931e0c45cfd5ffe8391834888aec0615bab34e3647762335154259f35797"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 1.57 GiB for Michigan and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}
