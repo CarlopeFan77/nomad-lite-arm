@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "new-york",
+    "name": "New York",
+    "state_code": "NY",
+    "country": "US",
+    "center": [
+        -75.712815,
+        42.72844
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -79.76483,
+        40.43922,
+        -71.6608,
+        45.01766
+    ],
+    "max_bounds": [
+        -80.413152,
+        40.072945,
+        -71.012478,
+        45.383935
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/new-york/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 804.06,
+            "download": {
+                "sha256": "022a8801c9ff7f1aee8a715622afd2f62482e742ee84df722472aa2fb784e098",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-new-york-v1/basic.mbtiles",
+                        "sha256": "022a8801c9ff7f1aee8a715622afd2f62482e742ee84df722472aa2fb784e098"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/new-york/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 819.46,
+            "download": {
+                "sha256": "b9cddd61f81583604094b04532336d7922e7f4084aa7ab8fc4ab32b1e3bba9a6",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-new-york-v1/terrain.mbtiles",
+                        "sha256": "b9cddd61f81583604094b04532336d7922e7f4084aa7ab8fc4ab32b1e3bba9a6"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/new-york/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 325.02,
+            "download": {
+                "sha256": "79a7592ed9c21337a1a46df161ec4f6926b02675e4e0a20ee1ff04a8aa21b26b",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-new-york-v1/contours.mbtiles",
+                        "sha256": "79a7592ed9c21337a1a46df161ec4f6926b02675e4e0a20ee1ff04a8aa21b26b"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 1.90 GiB for New York and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}

@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "missouri",
+    "name": "Missouri",
+    "state_code": "MO",
+    "country": "US",
+    "center": [
+        -92.433305,
+        38.30565
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -95.77751,
+        35.99466,
+        -89.0891,
+        40.61664
+    ],
+    "max_bounds": [
+        -96.312583,
+        35.624902,
+        -88.554027,
+        40.986398
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/missouri/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 310.69,
+            "download": {
+                "sha256": "4699b1664ef3678890fd2f313db65ba69ec3981090481fd0b14ed0e27100dbf8",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-missouri-v1/basic.mbtiles",
+                        "sha256": "4699b1664ef3678890fd2f313db65ba69ec3981090481fd0b14ed0e27100dbf8"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/missouri/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 727.48,
+            "download": {
+                "sha256": "392129d795e1fcca459dd9a5fcdf87cac180f34d43a881a8aea0f45b800347b5",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-missouri-v1/terrain.mbtiles",
+                        "sha256": "392129d795e1fcca459dd9a5fcdf87cac180f34d43a881a8aea0f45b800347b5"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/missouri/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 217.87,
+            "download": {
+                "sha256": "a8c19c6145e4d097f0146af858fb4921bbf49c4ea043cd89e55bdec8e6204553",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-missouri-v1/contours.mbtiles",
+                        "sha256": "a8c19c6145e4d097f0146af858fb4921bbf49c4ea043cd89e55bdec8e6204553"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 1.23 GiB for Missouri and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}

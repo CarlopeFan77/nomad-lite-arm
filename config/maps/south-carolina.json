@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "south-carolina",
+    "name": "South Carolina",
+    "state_code": "SC",
+    "country": "US",
+    "center": [
+        -80.937445,
+        33.624035
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -83.35622,
+        32.02967,
+        -78.51867,
+        35.2184
+    ],
+    "max_bounds": [
+        -83.743224,
+        31.774572,
+        -78.131666,
+        35.473498
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/south-carolina/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 208.37,
+            "download": {
+                "sha256": "c387f7331599fd922396bdf208cb3cb8cfa8cf11ab4233a6eb506b1b4840150c",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-south-carolina-v1/basic.mbtiles",
+                        "sha256": "c387f7331599fd922396bdf208cb3cb8cfa8cf11ab4233a6eb506b1b4840150c"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/south-carolina/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 291.99,
+            "download": {
+                "sha256": "a61d524560287ba3551be3ad7d3b7392405e7dfa3db422feec1d90ed214b5fbf",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-south-carolina-v1/terrain.mbtiles",
+                        "sha256": "a61d524560287ba3551be3ad7d3b7392405e7dfa3db422feec1d90ed214b5fbf"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/south-carolina/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 69.99,
+            "download": {
+                "sha256": "a7b4ae86992e30de02b3063d885f21790b1e37e16faf036449a3a835b8981f09",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-south-carolina-v1/contours.mbtiles",
+                        "sha256": "a7b4ae86992e30de02b3063d885f21790b1e37e16faf036449a3a835b8981f09"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 570 MiB for South Carolina and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}
