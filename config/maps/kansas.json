@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "kansas",
+    "name": "Kansas",
+    "state_code": "KS",
+    "country": "US",
+    "center": [
+        -98.32138,
+        38.497555
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -102.0535,
+        36.99136,
+        -94.58926,
+        40.00375
+    ],
+    "max_bounds": [
+        -102.650639,
+        36.74136,
+        -93.992121,
+        40.25375
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/kansas/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 138.64,
+            "download": {
+                "sha256": "576709f51f583d62c40d6aa48c1d1b6da20dad0ce72ad6119059055e2381b31d",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-kansas-v1/basic.mbtiles",
+                        "sha256": "576709f51f583d62c40d6aa48c1d1b6da20dad0ce72ad6119059055e2381b31d"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/kansas/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 495.2,
+            "download": {
+                "sha256": "bac3b9d6eb1fc889afa982ffb2f9e8a8cc7ed521a7987217483d944eb394b36f",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-kansas-v1/terrain.mbtiles",
+                        "sha256": "bac3b9d6eb1fc889afa982ffb2f9e8a8cc7ed521a7987217483d944eb394b36f"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/kansas/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 84.43,
+            "download": {
+                "sha256": "8bfbc7d9287958497d748c403b3ca32c7fcedb6f2c135ef01d4a56463d94089a",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-kansas-v1/contours.mbtiles",
+                        "sha256": "8bfbc7d9287958497d748c403b3ca32c7fcedb6f2c135ef01d4a56463d94089a"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 718 MiB for Kansas and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}

@@ -1,0 +1,107 @@
+{
+    "schema_version": 1,
+    "id": "oklahoma",
+    "name": "Oklahoma",
+    "state_code": "OK",
+    "country": "US",
+    "center": [
+        -98.718845,
+        35.309385
+    ],
+    "zoom": 7.0,
+    "bounds": [
+        -103.0078,
+        33.61348,
+        -94.42989,
+        37.00529
+    ],
+    "max_bounds": [
+        -103.694033,
+        33.342135,
+        -93.743657,
+        37.276635
+    ],
+    "packages": {
+        "basic": {
+            "file": "data/maps/oklahoma/basic.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 14,
+            "approx_size_mib": 180.78,
+            "download": {
+                "sha256": "26366fd8c74056e22f77e03fe4996b68fc908f2d75bf0b0db254b6180a69c38b",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-oklahoma-v1/basic.mbtiles",
+                        "sha256": "26366fd8c74056e22f77e03fe4996b68fc908f2d75bf0b0db254b6180a69c38b"
+                    }
+                ]
+            }
+        },
+        "terrain": {
+            "file": "data/maps/oklahoma/terrain.mbtiles",
+            "minzoom": 0,
+            "maxzoom": 12,
+            "approx_size_mib": 600.88,
+            "download": {
+                "sha256": "51a838ecfedbb202b6628c156e2eccc56818fa71252ec008fbecaf953cbca1c6",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-oklahoma-v1/terrain.mbtiles",
+                        "sha256": "51a838ecfedbb202b6628c156e2eccc56818fa71252ec008fbecaf953cbca1c6"
+                    }
+                ]
+            }
+        },
+        "contours": {
+            "file": "data/maps/oklahoma/contours.mbtiles",
+            "minzoom": 10,
+            "maxzoom": 13,
+            "approx_size_mib": 131.01,
+            "download": {
+                "sha256": "efec15c8ee5037f79e1a102d4262cfc31307f41aa9671779476b3bbb98e03990",
+                "parts": [
+                    {
+                        "url": "https://github.com/CarlopeFan77/nomad-lite-arm/releases/download/maps-oklahoma-v1/contours.mbtiles",
+                        "sha256": "efec15c8ee5037f79e1a102d4262cfc31307f41aa9671779476b3bbb98e03990"
+                    }
+                ]
+            }
+        }
+    },
+    "profiles": {
+        "basic": {
+            "label": "Basic",
+            "description": "Offline roads, towns, places, water, buildings, labels, and map scale.",
+            "packages": [
+                "basic"
+            ],
+            "install_note": "Smallest and fastest map option."
+        },
+        "topo": {
+            "label": "Topo",
+            "description": "Basic maps plus hillshade, 3D terrain, and 40 ft / 200 ft elevation contours.",
+            "packages": [
+                "basic",
+                "terrain",
+                "contours"
+            ],
+            "install_note": "Large map package. Around 913 MiB for Oklahoma and may take substantial time to download and install on lightweight hardware."
+        }
+    },
+    "contour_interval_ft": 40,
+    "index_contour_interval_ft": 200,
+    "contour_tiles": {
+        "minor": {
+            "minzoom": 12,
+            "maxzoom": 13
+        },
+        "major": {
+            "minzoom": 10,
+            "maxzoom": 13
+        }
+    },
+    "attribution": {
+        "basic": "OpenStreetMap contributors",
+        "terrain": "Mapzen / Tilezen terrain data"
+    }
+}
