@@ -1,0 +1,63 @@
+name: Repository checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Check Bash syntax
+        shell: bash
+        run: |
+          bash -n install.sh nomad scripts/*.sh
+
+      - name: Compile Python source without third-party dependencies
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          files = sorted(list(Path("scripts").glob("*.py")) + list(Path("dashboard").glob("*.py")) + list(Path("tools").rglob("*.py")))
+          for file in files:
+              compile(file.read_bytes(), str(file), "exec")
+          print(f"Compiled {len(files)} Python sources")
+          PY
+
+      - name: Validate active map configuration JSON
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          configs = sorted(Path("config/maps").glob("*.json"))
+          assert configs, "No active state configurations"
+
+          required = {"basic", "terrain", "contours"}
+          for path in configs:
+              state = json.loads(path.read_text(encoding="utf-8"))
+              assert state.get("id") == path.stem, f"{path}: state id mismatch"
+              packages = state.get("packages", {})
+              assert required <= packages.keys(), f"{path}: missing packages"
+              profiles = state.get("profiles", {})
+              assert profiles.get("basic", {}).get("packages") == ["basic"], f"{path}: bad Basic profile"
+              assert profiles.get("topo", {}).get("packages") == ["basic", "terrain", "contours"], f"{path}: bad Topo profile"
+              for name in required:
+                  package = packages[name]
+                  assert package.get("file"), f"{path}: {name} missing file"
+                  download = package.get("download", {})
+                  digest = download.get("sha256", "")
+                  assert len(digest) == 64 and all(c in "0123456789abcdefABCDEF" for c in digest), f"{path}: {name} invalid SHA256"
+                  parts = download.get("parts", [])
+                  assert parts, f"{path}: {name} missing download parts"
+                  for part in parts:
+                      assert part.get("url", "").startswith("https://"), f"{path}: {name} invalid part URL"
+                      sha = part.get("sha256", "")
+                      assert len(sha) == 64 and all(c in "0123456789abcdefABCDEF" for c in sha), f"{path}: {name} invalid part SHA256"
+
+          print(f"Validated {len(configs)} active state configurations")
+          PY
